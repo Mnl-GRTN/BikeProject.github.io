@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Pitch Detector</title>
+		<!-- Fichier CSS -->
+		<link rel="stylesheet" type="text/css" href="index.css"/>
+
+		<link href='http://fonts.googleapis.com/css?family=Alike' rel='stylesheet' type='text/css'>
+
+		<!-- Try Graph Head-->
+		<script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-base.min.js"></script>
+		<div class="topnav">
+			<a class="active" href="#home">BikeProject</a>
+			<a href="#GraphPage">GraphPage</a>
+		  </div>
+
+	</head>
+	<body>
+		<script src="js/pitchdetect.js"></script>
+		<div class="btn-group" style="width:100%">
+			<button class="button" onclick="startPitchDetect();">Start</button>
+			<button	class="button" onclick="this.innerText = togglePlayback()">Stop</button>
+			<button class="button" onclick="toggleLiveInput()">use live input</button>
+			<button class="button" onclick="toggleOscillator()">use oscillator</button>
+			<button class="button" onclick="addGraph()">addGraph</button>
+		</div>
+
+		<div id="detector" class="vague">
+			<div class="pitch"><span id="pitch">--</span>Hz</div>
+			<div class="note"><span id="note">--</span></div>   
+			<canvas id="output" width=300 height=42></canvas>
+			
+			<div id="detune"><span id="detune_amt">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
+		</div>
+		
+		<!-- just used for debugging
+		<canvas id="waveform" width="512" height="256"></canvas>
+		-->
+
+		<script type="text/javascript">
+
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-35593052-1']);
+			_gaq.push(['_trackPageview']);
+
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+			
+		</script>
+		<div id="Graph">
+			<script>
+			function addGraph(){
+				anychart.onDocumentReady(function () {
+					var data = FreqGraph;
+
+					// create a data set
+					var dataSet = anychart.data.set(data);
+
+					// map the data for all series
+					var firstSeriesData = dataSet.mapAs({x: 0, value: 1});
+
+					// create a line chart
+					var chart = anychart.line();
+
+					// create the series and name them
+					var firstSeries = chart.line(firstSeriesData);
+					firstSeries.name("Frequency");
+
+					// add a legend
+					chart.legend().enabled(true);
+
+					// add a title
+					chart.title("Frequency Graph");
+					// specify where to display the chart
+					chart.container("Graph");
+					chart.maxHeight(500);
+					chart.maxWidth(500);
+
+					//draw the chart in the Graph div
+					chart.draw();
+					alert("Graph Added");
+					FreqGraph = [];
+
+				});
+			}
+			</script>
+		</div>
+	</body>
+</html>

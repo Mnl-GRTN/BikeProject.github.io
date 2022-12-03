@@ -1,0 +1,86 @@
+
+body { font: 14pt 'Alike', sans-serif; background-color: #f9f4ef;}
+#note { font-size: 164px; }
+.droptarget { background-color: #348781}
+div.confident { color: black; }
+div.vague { color: lightgrey; }
+#note { display: inline-block; height:180px; text-align: left;}
+
+#detector { width: 50%; height: 300px; border: 4px solid gray; border-radius: 8px; text-align: center; padding-top: 10px; margin-top: 1em; margin-left: 25%}
+#output { width: 300px; height: 42px; }
+#flat { display: none; }
+#sharp { display: none; }
+.flat #flat { display: inline; }
+.sharp #sharp { display: inline; }
+
+html, body{ 
+    width: 100%; height: 100%; margin: 0; padding: 0; 
+  } 
+
+#Graph { 
+    /* Grid 2 by 2 align and centered*/
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #f9f4ef;
+ } 
+
+.btn-group{
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+
+}
+
+.button {
+    width: 19%;
+    margin-top: 1em;
+    height : 3rem;
+    padding: 0 2rem;
+    border-radius : 1rem;
+    background: #8c7851;
+    background-size: 400%;
+    background-position: 90% 0;
+    color: #fffffe;
+    transition : background 0.8s
+    
+}
+
+.button:hover{
+    border: 3px solid #c1a66f;
+    transition: 0.7s;
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: #020826;
+    overflow: hidden;
+  }
+  
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #eaddcf;
+
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #f25042;
+    color: white;
+  }
+  
