@@ -68,37 +68,40 @@ window.onload = function() {
 
 }
 
-function startPitchDetect() {	
-    // grab an audio context
-    audioContext = new AudioContext();
+function startPitchDetect() {
+			// grab an audio context
+			audioContext = new AudioContext();
 
-    // Attempt to get audio input
-    navigator.mediaDevices.getUserMedia(
-    {
-        "audio": {
-            "mandatory": {
-                "googEchoCancellation": "false",
-                "googAutoGainControl": "false",
-                "googNoiseSuppression": "false",
-                "googHighpassFilter": "false"
-            },
-            "optional": []
-        },
-    }).then((stream) => {
-        // Create an AudioNode from the stream.
-        mediaStreamSource = audioContext.createMediaStreamSource(stream);
+			// Attempt to get audio input
+			navigator.mediaDevices.getUserMedia(
+			{
+				"audio": {
+					"mandatory": {
+						"googEchoCancellation": "false",
+						"googAutoGainControl": "false",
+						"googNoiseSuppression": "false",
+						"googHighpassFilter": "false"
+					},
+					"optional": []
+				},
+			}).then((stream) => {
+				// Create an AudioNode from the stream.
+				mediaStreamSource = audioContext.createMediaStreamSource(stream);
 
-	    // Connect it to the destination.
-	    analyser = audioContext.createAnalyser();
-	    analyser.fftSize = 2048;
-	    mediaStreamSource.connect( analyser );
-	    updatePitch();
-    }).catch((err) => {
-        // always check for errors at the end.
-        console.error(`${err.name}: ${err.message}`);
-        alert('Stream generation failed.');
-    });
+				// Connect it to the destination.
+				analyser = audioContext.createAnalyser();
+				analyser.fftSize = 2048;
+				mediaStreamSource.connect( analyser );
+				updatePitch();
+
+			}).catch((err) => {
+				// always check for errors at the end.
+				console.error(`${err.name}: ${err.message}`);
+				alert('Stream generation failed.');
+			});
+
 }
+
 
 function toggleOscillator() {
     if (isPlaying) {
@@ -262,11 +265,17 @@ function updatePitch( time ) {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
 	 	pitchElem.innerText = Math.round( pitch ) ;
-		
-		if(Math.round( pitch ) > 82 && Math.round( pitch ) < 1174){
-			FreqGraph.push([FreqGraph.length, Math.round( pitch )]);
+		//If the checkbox "Graphornot" is checked then 
+		if (document.getElementById("Graphornot").checked) {
+			if(Math.round( pitch ) > 40 && Math.round( pitch ) < 1000){
+				FreqGraph.push([((FreqGraph.length)/60).toFixed(2), Math.round( pitch )]);
+			}
+			if (FreqGraph.length > 30) {
+				togglePlayback();
+				console.log(averageFreqGraph());
+				addGraph();
+			}
 		}
-
 	 	var note =  noteFromPitch( pitch );
 		noteElem.innerHTML = noteStrings[note%12];
 		var detune = centsOffFromPitch( pitch, note );
@@ -287,4 +296,48 @@ function updatePitch( time ) {
 	rafID = window.requestAnimationFrame( updatePitch );
 }
 
+function addGraph(){
+	anychart.onDocumentReady(function () {
+		var data = FreqGraph;
 
+		// create a data set
+		var dataSet = anychart.data.set(data);
+
+		// map the data for all series
+		var firstSeriesData = dataSet.mapAs({x: 0, value: 1});
+
+		// create a line chart
+		var chart = anychart.line();
+
+		// create the series and name them
+		var firstSeries = chart.line(firstSeriesData);
+		firstSeries.name("Frequency");
+
+		// add a legend
+		chart.legend().enabled(true);
+
+		// add a title
+		chart.title("Frequency Graph");
+		// specify where to display the chart
+		chart.container("Graph");
+		chart.maxHeight(500);
+		chart.maxWidth(500);
+
+		//draw the chart in the Graph div
+		chart.draw();
+		alert("Graph Added");
+		FreqGraph = [];
+
+
+	});
+}
+
+function averageFreqGraph(){
+	var sum = 0;
+	for(var i = 0; i < FreqGraph.length; i++){
+		sum += FreqGraph[i][1];
+	}
+
+	var avg = sum/FreqGraph.length;
+	return avg;
+}
