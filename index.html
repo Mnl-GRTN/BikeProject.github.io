@@ -24,6 +24,12 @@
 			<button class="button" onclick="toggleOscillator()">use oscillator</button>
 			<button class="button" onclick="addGraph()">addGraph</button>
 		</div>
+		<div>
+		<label for="Graphornot">Graph</label>
+		<input type="checkbox" id="Graphornot" checked>
+		</div>
+		
+
 
 		<div id="detector" class="vague">
 			<div class="pitch"><span id="pitch">--</span>Hz</div>
@@ -51,42 +57,6 @@
 			
 		</script>
 		<div id="Graph">
-			<script>
-			function addGraph(){
-				anychart.onDocumentReady(function () {
-					var data = FreqGraph;
-
-					// create a data set
-					var dataSet = anychart.data.set(data);
-
-					// map the data for all series
-					var firstSeriesData = dataSet.mapAs({x: 0, value: 1});
-
-					// create a line chart
-					var chart = anychart.line();
-
-					// create the series and name them
-					var firstSeries = chart.line(firstSeriesData);
-					firstSeries.name("Frequency");
-
-					// add a legend
-					chart.legend().enabled(true);
-
-					// add a title
-					chart.title("Frequency Graph");
-					// specify where to display the chart
-					chart.container("Graph");
-					chart.maxHeight(500);
-					chart.maxWidth(500);
-
-					//draw the chart in the Graph div
-					chart.draw();
-					alert("Graph Added");
-					FreqGraph = [];
-
-				});
-			}
-			</script>
 		</div>
 	</body>
 </html>
