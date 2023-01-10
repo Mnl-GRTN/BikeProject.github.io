@@ -193,7 +193,7 @@ function updatePitch( time ) {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
 		if (pitch > 40 && pitch < 1000){
-	 	noteElem.innerText = Math.round( pitch )+ " Hz";
+	 		noteElem.innerText = Math.round( pitch )+ " Hz";
 		}
 		//If the checkbox "Graphornot" is checked then 
 		if (document.getElementById("Graphornot").checked) {
