@@ -8,21 +8,18 @@
 		<link href='http://fonts.googleapis.com/css?family=Alike' rel='stylesheet' type='text/css'>
 
 		<!-- Try Graph Head-->
-		<script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-base.min.js"></script>
+		<script src="./js/anychart-base.min.js"></script>
 		<div class="topnav">
-			<a class="active" href="#home">BikeProject</a>
-			<a href="#GraphPage">GraphPage</a>
-		  </div>
-
+			<a class="active" href="#index">BikeProject</a>
+			<a href="GraphPage.html">GraphPage</a>
+		</div>
+		<meta charset="utf-8">
 	</head>
 	<body>
 		<script src="js/pitchdetect.js"></script>
 		<div class="btn-group" style="width:100%">
 			<button class="button" onclick="startPitchDetect();">Start</button>
 			<button	class="button" onclick="this.innerText = togglePlayback()">Stop</button>
-			<button class="button" onclick="toggleLiveInput()">use live input</button>
-			<button class="button" onclick="toggleOscillator()">use oscillator</button>
-			<button class="button" onclick="addGraph()">addGraph</button>
 		</div>
 		<div>
 		<label for="Graphornot">Graph</label>
@@ -32,18 +29,15 @@
 
 
 		<div id="detector" class="vague">
-			<div class="pitch"><span id="pitch">--</span>Hz</div>
 			<div class="note"><span id="note">--</span></div>   
 			<canvas id="output" width=300 height=42></canvas>
-			
-			<div id="detune"><span id="detune_amt">--</span><span id="flat">cents &#9837;</span><span id="sharp">cents &#9839;</span></div>
 		</div>
 		
 		<!-- just used for debugging
 		<canvas id="waveform" width="512" height="256"></canvas>
 		-->
 
-		<script type="text/javascript">
+		<!--<script type="text/javascript">
 
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-35593052-1']);
@@ -55,8 +49,7 @@
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 			
-		</script>
-		<div id="Graph">
-		</div>
+		</script>-->
+		<div id="Graph"></div>
 	</body>
 </html>

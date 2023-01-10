@@ -10,11 +10,9 @@ var mediaStreamSource = null;
 var detectorElem, 
 	canvasElem,
 	waveCanvas,
-	pitchElem,
-	noteElem,
-	detuneElem,
-	detuneAmount;
+	noteElem
 var FreqGraph = [];
+var Compteur = 0;
 
 window.onload = function() {
 	audioContext = new AudioContext();
@@ -28,10 +26,7 @@ window.onload = function() {
 		waveCanvas.strokeStyle = "black";
 		waveCanvas.lineWidth = 1;
 	}
-	pitchElem = document.getElementById( "pitch" );
 	noteElem = document.getElementById( "note" );
-	detuneElem = document.getElementById( "detune" );
-	detuneAmount = document.getElementById( "detune_amt" );
 
 	detectorElem.ondragenter = function () { 
 		this.classList.add("droptarget"); 
@@ -103,57 +98,6 @@ function startPitchDetect() {
 }
 
 
-function toggleOscillator() {
-    if (isPlaying) {
-        //stop playing and return
-        sourceNode.stop( 0 );
-        sourceNode = null;
-        analyser = null;
-        isPlaying = false;
-		if (!window.cancelAnimationFrame)
-			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
-        window.cancelAnimationFrame( rafID );
-        return "play oscillator";
-    }
-    sourceNode = audioContext.createOscillator();
-
-    analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    sourceNode.connect( analyser );
-    analyser.connect( audioContext.destination );
-    sourceNode.start(0);
-    isPlaying = true;
-    isLiveInput = false;
-    updatePitch();
-
-    return "stop";
-}
-
-function toggleLiveInput() {
-    if (isPlaying) {
-        //stop playing and return
-        sourceNode.stop( 0 );
-        sourceNode = null;
-        analyser = null;
-        isPlaying = false;
-		if (!window.cancelAnimationFrame)
-			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
-        window.cancelAnimationFrame( rafID );
-    }
-    getUserMedia(
-    	{
-            "audio": {
-                "mandatory": {
-                    "googEchoCancellation": "false",
-                    "googAutoGainControl": "false",
-                    "googNoiseSuppression": "false",
-                    "googHighpassFilter": "false"
-                },
-                "optional": []
-            },
-        }, gotStream);
-}
-
 function togglePlayback() {
     if (isPlaying) {
         //stop playing and return
@@ -171,7 +115,6 @@ function togglePlayback() {
     sourceNode = audioContext.createBufferSource();
     sourceNode.buffer = theBuffer;
     sourceNode.loop = true;
-
     analyser = audioContext.createAnalyser();
     analyser.fftSize = 2048;
     sourceNode.connect( analyser );
@@ -179,6 +122,7 @@ function togglePlayback() {
     sourceNode.start( 0 );
     isPlaying = true;
     isLiveInput = false;
+
     updatePitch();
 
     return "Stop";
@@ -189,20 +133,7 @@ var tracks = null;
 var buflen = 2048;
 var buf = new Float32Array( buflen );
 
-var noteStrings = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-function noteFromPitch( frequency ) {
-	var noteNum = 12 * (Math.log( frequency / 440 )/Math.log(2) );
-	return Math.round( noteNum ) + 69;
-}
-
-function frequencyFromNoteNumber( note ) {
-	return 440 * Math.pow(2,(note-69)/12);
-}
-
-function centsOffFromPitch( frequency, note ) {
-	return Math.floor( 1200 * Math.log( frequency / frequencyFromNoteNumber( note ))/Math.log(2) );
-}
 
 function autoCorrelate( buf, sampleRate ) {
 	// Implements the ACF2+ algorithm
@@ -257,37 +188,21 @@ function updatePitch( time ) {
 
  	if (ac == -1) {
  		detectorElem.className = "vague";
-	 	pitchElem.innerText = "--";
 		noteElem.innerText = "-";
-		detuneElem.className = "";
-		detuneAmount.innerText = "--";
  	} else {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
-	 	pitchElem.innerText = Math.round( pitch ) ;
+	 	noteElem.innerText = Math.round( pitch )+ " Hz";
 		//If the checkbox "Graphornot" is checked then 
 		if (document.getElementById("Graphornot").checked) {
 			if(Math.round( pitch ) > 40 && Math.round( pitch ) < 1000){
 				FreqGraph.push([((FreqGraph.length)/60).toFixed(2), Math.round( pitch )]);
 			}
-			if (FreqGraph.length > 30) {
+			if (FreqGraph.length > 30) { //30 pour 0.5
 				togglePlayback();
-				console.log(averageFreqGraph());
-				addGraph();
+				console.log(averagesimplified());
+				createGraph();
 			}
-		}
-	 	var note =  noteFromPitch( pitch );
-		noteElem.innerHTML = noteStrings[note%12];
-		var detune = centsOffFromPitch( pitch, note );
-		if (detune == 0 ) {
-			detuneElem.className = "";
-			detuneAmount.innerHTML = "--";
-		} else {
-			if (detune < 0)
-				detuneElem.className = "flat";
-			else
-				detuneElem.className = "sharp";
-			detuneAmount.innerHTML = Math.abs( detune );
 		}
 	}
 
@@ -296,7 +211,17 @@ function updatePitch( time ) {
 	rafID = window.requestAnimationFrame( updatePitch );
 }
 
-function addGraph(){
+
+//Function that create a div automatically for each graph and add it
+function createGraph(){
+	var div = document.createElement("div");
+	div.id = "Graph"+Compteur;
+	//Change CSS of div.id to copy the Graph div css
+	div.style = "width: 500px; height: 400px; margin: 0 auto; background-color: #fff; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-bottom: 10px; margin-top: 10px;";
+	div.style.paddingBottom = 1.5+"em";
+	//Ajouter un texte à div.id en UTF-8 avec la moyenne de la fréquence en utilisant averageGraph()
+	div.innerText = "Moyenne de la fréquence : "+averagesimplified().toFixed(2)+" Hz";
+	document.body.appendChild(div);
 	anychart.onDocumentReady(function () {
 		var data = FreqGraph;
 
@@ -319,8 +244,8 @@ function addGraph(){
 		// add a title
 		chart.title("Frequency Graph");
 		// specify where to display the chart
-		chart.container("Graph");
-		chart.maxHeight(500);
+		chart.container(div.id);
+		chart.maxHeight(400);
 		chart.maxWidth(500);
 
 		//draw the chart in the Graph div
@@ -330,14 +255,57 @@ function addGraph(){
 
 
 	});
+	Compteur++;
 }
 
-function averageFreqGraph(){
-	var sum = 0;
+
+function averagesimplified(){
+
+	liste_des_frequences = []
 	for(var i = 0; i < FreqGraph.length; i++){
-		sum += FreqGraph[i][1];
+		liste_des_frequences.push(FreqGraph[i][1]);
 	}
 
-	var avg = sum/FreqGraph.length;
+	var freq = [] ;
+	
+	var liste_de_liste_freq = [];
+
+	liste_des_frequences.sort();
+
+	len=liste_des_frequences.length;
+
+	for (var i=0;  i<len; i++) {
+		for (var j=0; j<len; j++) {
+			if (liste_des_frequences[j] >= liste_des_frequences[i]-10 && liste_des_frequences[j] <= liste_des_frequences[i]+10) {
+				freq.push(liste_des_frequences[j]);
+				}
+		}
+		liste_de_liste_freq.push(freq);
+		freq = [];
+	}
+
+	var position = 0;
+	len = liste_de_liste_freq.length;
+
+	for (var i=0; i<len; i++) {
+		if (liste_de_liste_freq[i].length > liste_de_liste_freq[position].length) 
+			position = i;
+	}
+
+	var sum = 0;
+	len = liste_de_liste_freq[position].length;
+
+	for (var i=0; i<len; i++) {
+		sum += liste_de_liste_freq[position][i];
+	}
+
+	var avg = sum / (liste_de_liste_freq[position]).length;
+
 	return avg;
 }
+
+
+//si on change la durée de l'enregistrement ("freqgraph>30") ca ne change pas les absices du graph
+
+// il faut changer le rectangle d'affichage pour enelver les div des notes
+
