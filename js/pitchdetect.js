@@ -309,5 +309,4 @@ function averagesimplified(){
 
 // il faut changer le rectangle d'affichage pour enelver les div des notes
 
-//test 
 
