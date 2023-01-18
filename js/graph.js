@@ -50,16 +50,6 @@ window.onload = function() {
 	  	reader.readAsArrayBuffer(e.dataTransfer.files[0]);
 	  	return false;
 	};
-	
-	/*fetch('whistling3.ogg')
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error(`HTTP error, status = ${response.status}`);
-			}
-			return response.arrayBuffer();
-		}).then((buffer) => audioContext.decodeAudioData(buffer)).then((decodedData) => {
-			theBuffer = decodedData;
-		});*/
 
 }
 
@@ -105,6 +95,7 @@ function togglePlayback() {
         sourceNode = null;
         analyser = null;
         isPlaying = false;
+		noteElem.innerText = "--";
 		
 		if (!window.cancelAnimationFrame)
 			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
@@ -145,7 +136,7 @@ function autoCorrelate( buf, sampleRate ) {
 		rms += val*val;
 	}
 	rms = Math.sqrt(rms/SIZE);
-	if (rms<0.015) // not enough signal 
+	if (rms<0.01) // not enough signal
 		return -1;
 
 	var r1=0, r2=SIZE-1, thres=0.2;
@@ -189,20 +180,19 @@ function updatePitch( time ) {
  	if (ac == -1) {
  		detectorElem.className = "vague";
 		noteElem.innerText = "--";
-		document.getElementById("reglage").innerText = "--";
  	} else {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
-
-		if(Math.round( pitch ) > 40 && Math.round( pitch ) < 1000){
-			FreqGraph.push([((FreqGraph.length)/60).toFixed(2), Math.round( pitch )]);
+		if (pitch > 40 && pitch < 1000){
+	 		noteElem.innerText = Math.round( pitch )+ " Hz";
+			 FreqGraph.push([((FreqGraph.length)/60).toFixed(2), Math.round( pitch )]);
+			 console.log("FreqGraph : "+pitch);
 		}
-
-		if (FreqGraph.length > 15) { //15 = 0.25s
-			//console.log(averagesimplified());
-			Reglage(averagesimplified());
-			noteElem.innerText = Math.round(averagesimplified()) + " Hz";
-			FreqGraph = [];
+		
+		if (FreqGraph.length > document.getElementById("Duree").value*60) { //60 pour 1s
+			togglePlayback();
+			console.log(averagesimplified());
+			createGraph();
 		}
 		
 	}
@@ -210,6 +200,53 @@ function updatePitch( time ) {
 	if (!window.requestAnimationFrame)
 		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
 	rafID = window.requestAnimationFrame( updatePitch );
+}
+
+
+//Function that create a div automatically for each graph and add it
+function createGraph(){
+	var div = document.createElement("div");
+	div.id = "Graph"+Compteur;
+	//Change CSS of div.id to copy the Graph div css
+	div.style = "width: 500px; height: 400px; margin: 0 auto; background-color: #fff; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-bottom: 10px; margin-top: 10px;";
+	div.style.paddingBottom = 1.5+"em";
+	//Ajouter un texte à div.id en UTF-8 avec la moyenne de la fréquence en utilisant averageGraph()
+	div.innerText = "Moyenne de la fréquence : "+averagesimplified().toFixed(2)+" Hz";
+	document.body.appendChild(div);
+	anychart.onDocumentReady(function () {
+		var data = FreqGraph;
+
+		// create a data set
+		var dataSet = anychart.data.set(data);
+
+		// map the data for all series
+		var firstSeriesData = dataSet.mapAs({x: 0, value: 1});
+
+		// create a line chart
+		var chart = anychart.line();
+
+		// create the series and name them
+		var firstSeries = chart.line(firstSeriesData);
+		firstSeries.name("Frequency");
+
+		// add a legend
+		chart.legend().enabled(true);
+
+		// add a title
+		chart.title("Frequency Graph");
+		// specify where to display the chart
+		chart.container(div.id);
+		chart.maxHeight(400);
+		chart.maxWidth(500);
+
+		//draw the chart in the Graph div
+		chart.draw();
+		alert("Graph Added");
+		FreqGraph = [];
+
+
+	});
+	Compteur++;
 }
 
 
@@ -230,7 +267,7 @@ function averagesimplified(){
 
 	for (var i=0;  i<len; i++) {
 		for (var j=0; j<len; j++) {
-			if (liste_des_frequences[j] >= liste_des_frequences[i]-10 && liste_des_frequences[j] <= liste_des_frequences[i]+10) {
+			if (liste_des_frequences[j] >= liste_des_frequences[i]-5 && liste_des_frequences[j] <= liste_des_frequences[i]+5) {
 				freq.push(liste_des_frequences[j]);
 				}
 		}
@@ -258,66 +295,12 @@ function averagesimplified(){
 	return avg;
 }
 
-//If there is text in the input of id="TenseEntry" then div.id="Tension"="confident"
-//Else div.id="Tension"="vague"
-function Test(){	
-
-	if (document.getElementById("LinearMassEntry").value != "" && document.getElementById("LengthEntry").value != "" && document.getElementById("TenseEntry").value != ""){
-		var Tense = document.getElementById("TenseEntry").value;
-		var Length = document.getElementById("LengthEntry").value;
-		var LinearMass = document.getElementById("LinearMassEntry").value;
-		var Freq = Math.round((1/(2*Length))*Math.sqrt(Tense/LinearMass));
-		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : "+Freq+" Hz";
+function ClearGraph(){
+	//Clear/Delete all the divs
+	for (var i = 0; i < Compteur; i++) {
+		var div = document.getElementById("Graph"+i);
+		div.parentNode.removeChild(div);
 	}
-	else {document.getElementById("FreqAim").innerText = "Fréquence à obtenir : N/A";}
-
-	if (document.getElementById("TenseEntry").value == ""){
-		document.getElementById("Tension").className = "vague";
-	}
-	else{document.getElementById("Tension").className = "confident";}
-
-	if (document.getElementById("LengthEntry").value == ""){
-		document.getElementById("Longueur").className = "vague";
-	}
-	else{document.getElementById("Longueur").className = "confident";}
-
-	if (document.getElementById("LinearMassEntry").value == ""){
-		document.getElementById("Masselineique").className = "vague";
-	}
-	else{document.getElementById("Masselineique").className = "confident";}
-	
+	Compteur = 0;
 }
 
-function Reglage(pitch){
-
-	console.log("testorigine");
-	
-	if (document.getElementById("FreqAim").innerText != "Fréquence à obtenir : N/A"){
-		console.log("test");
-		
-		freq_theorique = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
-		console.log(freq_theorique);
-		
-		if (Number(pitch) < freq_theorique-10){
-			document.getElementById("reglage").innerText = "Augmenter la tension";
-			console.log("augmenter");
-		}
-
-		else if (Number(pitch) > freq_theorique+10){
-			document.getElementById("reglage").innerText = "Réduire la tension";
-			console.log("reduire");
-		}
-		
-		else if (Number(pitch) >= freq_theorique-10 && Number(pitch) <= freq_theorique+10){
-			document.getElementById("reglage").innerText = "Parfait!";
-			console.log("parfait");
-		}
-		
-		else{
-			console.log("test");
-			document.getElementById("reglage").innerText = "Réglage inconnu";
-		}
-		
-	}
-	
-}

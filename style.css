@@ -1,0 +1,120 @@
+@charset "UTF-8";
+body { font: 14pt 'Alike', sans-serif; background-color: #f9f4ef;}
+html, body{ 
+    width: 100%; height: 100%; margin: 0; padding: 0; 
+} 
+html{
+    font-size: 100%;
+}
+/* Responsive navbar with div clas="topnav" on Top of the page without any border with a black background and Add a background-color #f25042 to the active,current link */
+.topnav {
+    background-color: #020826;
+    overflow: hidden;
+  }
+  
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #eaddcf;
+
+    color: black;
+  }
+  
+  /* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #f25042;
+    color: white;
+  }
+
+#detector { width: 50%; height: 300px; border: 4px solid gray; border-radius: 8px; text-align: center; padding-top: 10px; margin-top: 1em; margin-left: 25%}
+#note { font-size: 164px; }
+div.vague{ color: lightgray}
+div.confident{ color: black}
+.container {
+  width: 50%; height: 100%; margin-left: 25%; padding: 0; display: flex; justify-content: space-evenly;
+}
+#Tension,#Masselineique,#Longueur{
+  width: 25%; height: 15%; border: 4px solid gray; border-radius: 8px; text-align: center; padding-top: 10px; margin-top: 1em; font-size: small;
+}
+/* Responsive navbar - display links on top of each other instead of side by side on small screens */
+/* Display bigger navbar on small screens */
+.btn-group{
+  width: 50%; margin-left: 25%; display: flex; justify-content: space-evenly;
+}
+.button{
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  cursor: pointer;
+  will-change: box-shadow,transform;
+  background: radial-gradient( 100% 100% at 100% 0%, #f25042 0%, #f25042 100% );
+  box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px rgb(58 65 111 / 50%);
+  padding: 0 50px;
+  margin-top: 2em;
+  border-radius: 6px;
+  color: #fff;
+  height: 40px;
+  font-size: 18px;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 40%);
+  transition: box-shadow 0.15s ease,transform 0.15s ease;
+}
+.button:hover {
+      box-shadow: 0px 4px 8px #2d234266, 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px #812921;
+      transform: translateY(-2px);
+  }
+.button:active{
+      box-shadow: inset 0px 3px 7px #3c4fe0;
+      transform: translateY(2px);
+}
+
+@media only screen and (max-device-width: 480px) {
+  .buttonStart, .buttonStop {
+    height: 5em;
+    width: 5em;
+    border-radius: 15%;
+    font-size: 58px;
+    background-color: lightgray;
+    cursor:pointer;
+
+
+  }  
+  .buttonStart{
+    position: absolute;
+    left: 50%;
+    top: 5em;
+    transform: translate(-125%, -50%);
+  }
+  .buttonStop{
+    position: absolute;
+    left: 50%;
+    top: 5em;
+    transform: translate(25%, -50%);
+  }
+  
+  .buttonStart:hover, .buttonStop:hover {
+    color:white;
+ }
+
+  .topnav a {
+    float: none;
+    display: block;
+    width: 100%;
+    height: 2em;
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 58px
+  }
+  .active{
+    /* Center in 2em high div */
+    line-height: 2em;
+  }
+}

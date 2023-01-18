@@ -1,31 +1,34 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Pitch Detector</title>
+		<title>BikeProject</title>
+
 		<!-- Fichier CSS -->
-		<link rel="stylesheet" type="text/css" href="index.css"/>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
 
-		<link href='http://fonts.googleapis.com/css?family=Alike' rel='stylesheet' type='text/css'>
+		<!-- <link href='http://fonts.googleapis.com/css?family=Alike' rel='stylesheet' type='text/css'> -->
 
+		<link rel="icon" type="image/png" href="icons/favicon-32x32.png" sizes="any" />
 		<!-- Try Graph Head-->
 		<script src="./js/anychart-base.min.js"></script>
 		<div class="topnav">
-			<a class="active" href="#index">BikeProject</a>
-			<a href="GraphPage.html">GraphPage</a>
+			<a class="active" href="#index">Analyse</a>
+			<a href="GraphPage.html">Graphique</a>
 		</div>
 		<meta charset="utf-8">
 	</head>
 	<body>
 		<script src="js/pitchdetect.js"></script>
-		<div class="btn-group" style="width:100%">
+		<div class="btn-group">
 			<button class="button" onclick="startPitchDetect();">Start</button>
-			<button	class="button" onclick="this.innerText = togglePlayback()">Stop</button>
+			<button	class="button" onclick="togglePlayback()">Stop</button>
 		</div>
 		<div>
-		<label for="Graphornot">Graph</label>
-		<input type="checkbox" id="Graphornot" checked>
+			<span id="FreqAim">Fréquence à obtenir : N/A</span>
 		</div>
-		
+		<div>
+			<span id="reglage">--</span>
+		</div>
 
 
 		<div id="detector" class="vague">
@@ -33,22 +36,27 @@
 			<canvas id="output" width=300 height=42></canvas>
 		</div>
 		
-		<!-- just used for debugging
-		<canvas id="waveform" width="512" height="256"></canvas>
-		-->
+		<div class="container">
+			<div id="Tension" class="vague">
+				<h3>Tension :</h3>
+				<div class="tense">
+				<input type="text" id="TenseEntry" value="800" oninput="Test();"></input></div>   
+				<canvas id="output" width=50 height=42></canvas>
+			</div>
+			<div id="Longueur" class="vague">
+				<h3>Longueur :</h3>
+				<div class="length">
+				<input type="text" id="LengthEntry" value="0.28" oninput="Test();"></input></div>   
+				<canvas id="output" width=50 height=42></canvas>
+			</div>
+			<div id="Masselineique" class="vague">
+				<h3>Masse Linéique :</h3>
+				<div class="mass">
+				<input type="text" id="LinearMassEntry" value="0.025" oninput="Test();"></input></div>   
+				<canvas id="output" width=50 height=42></canvas>
+			</div>
+		</div>
+		
 
-		<!--<script type="text/javascript">
-
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-35593052-1']);
-			_gaq.push(['_trackPageview']);
-
-			(function() {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-			
-		</script>-->
 	</body>
 </html>
