@@ -15,6 +15,7 @@ var FreqGraph = [];
 var Compteur = 0;
 
 window.onload = function() {
+	Test();
 	audioContext = new AudioContext();
 	MAX_SIZE = Math.max(4,Math.floor(audioContext.sampleRate/5000));	// corresponds to a 5kHz signal
 
@@ -51,7 +52,7 @@ window.onload = function() {
 	  	return false;
 	};
 	
-	/*fetch('whistling3.ogg')
+	fetch('whistling3.ogg')
 		.then((response) => {
 			if (!response.ok) {
 				throw new Error(`HTTP error, status = ${response.status}`);
@@ -59,7 +60,7 @@ window.onload = function() {
 			return response.arrayBuffer();
 		}).then((buffer) => audioContext.decodeAudioData(buffer)).then((decodedData) => {
 			theBuffer = decodedData;
-		});*/
+		});
 
 }
 
@@ -145,7 +146,7 @@ function autoCorrelate( buf, sampleRate ) {
 		rms += val*val;
 	}
 	rms = Math.sqrt(rms/SIZE);
-	if (rms<0.02) // not enough signal 
+	if (rms<0.015) // not enough signal 
 		return -1;
 
 	var r1=0, r2=SIZE-1, thres=0.2;
@@ -201,6 +202,7 @@ function updatePitch( time ) {
 		if (FreqGraph.length > 15) { //15 = 0.25s
 			//console.log(averagesimplified());
 			Reglage(averagesimplified());
+			updateGauge(averagesimplified());
 			noteElem.innerText = Math.round(averagesimplified()) + " Hz";
 			FreqGraph = [];
 		}
@@ -320,4 +322,39 @@ function Reglage(pitch){
 		
 	}
 	
+}
+
+function updateGauge(frequency){
+	var freqtohave = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
+    var freqmax = 2*freqtohave;
+    var pointer = document.getElementById("pointer");
+    if(frequency < freqmax && frequency > 0){
+      if(frequency < (freqtohave + (0.02*freqtohave)) && frequency > (freqtohave-(freqtohave*0.02))){
+        pointer.style.left = "47%";
+        pointer.style.backgroundColor = "green";
+      }
+      else{
+      pointer.style.left = ((frequency/freqmax)*100)-3 + "%";
+      pointer.style.backgroundColor = "orange";
+      }
+    }
+    if(frequency > freqmax){
+      pointer.style.left = "97%";
+      pointer.style.backgroundColor = "red";
+    }
+    if(frequency <= 0){
+      pointer.style.left = "0%";
+      pointer.style.backgroundColor = "red";
+    }
+  }
+
+function hideGauge(){
+	if(document.getElementById("GaugeCheck").checked == true){
+		document.getElementById("gauge").style.display = "block";
+		document.getElementById("detector").style.height = "0%";
+	}
+	else{
+		document.getElementById("gauge").style.display = "none";
+		document.getElementById("detector").style.height = "5%";
+	}
 }

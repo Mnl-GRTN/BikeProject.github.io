@@ -5,6 +5,7 @@
 
 		<!-- Fichier CSS -->
 		<link rel="stylesheet" type="text/css" href="style.css"/>
+		<link rel="stylesheet" type="text/css" href="toggleswitch.css"/>
 
 		<!-- <link href='http://fonts.googleapis.com/css?family=Alike' rel='stylesheet' type='text/css'> -->
 
@@ -30,33 +31,57 @@
 			<span id="reglage">--</span>
 		</div>
 
+		<div class="Tuning">
+			<div class="outlinewheel">
+				<div class="wheel">
+					<div class="spoke spoke1"></div>
+					<div class="spoke spoke2"></div>
+					<div class="spoke spoke3"></div>
+					<div class="spoke spoke4"></div>
+					<div class="spoke spoke5"></div>
+					<div class="spoke spoke6"></div>
+				</div>
+			</div>
 
-		<div id="detector" class="vague">
-			<div class="note"><span id="note">--</span></div>   
-			<canvas id="output" width=300 height=42></canvas>
-		</div>
-		
-		<div class="container">
-			<div id="Tension" class="vague">
-				<h3>Tension :</h3>
-				<div class="tense">
-				<input type="text" id="TenseEntry" value="800" oninput="Test();"></input></div>   
-				<canvas id="output" width=50 height=42></canvas>
-			</div>
-			<div id="Longueur" class="vague">
-				<h3>Longueur :</h3>
-				<div class="length">
-				<input type="text" id="LengthEntry" value="0.28" oninput="Test();"></input></div>   
-				<canvas id="output" width=50 height=42></canvas>
-			</div>
-			<div id="Masselineique" class="vague">
-				<h3>Masse Linéique :</h3>
-				<div class="mass">
-				<input type="text" id="LinearMassEntry" value="0.025" oninput="Test();"></input></div>   
-				<canvas id="output" width=50 height=42></canvas>
-			</div>
-		</div>
-		
+			<div class="ControlPanel">
+				<div class="ControlTuner">
+					<h4 style="text-align: center;">Tuning Panel</h4>
 
+					<div class="toggleContainer">             
+						<label class="toggleSwitch nolabel" onclick="hideGauge()">
+						   <input id="GaugeCheck" type="checkbox" checked/>
+						   <a></a>
+						   <span>
+							   <span class="left-span">🎧 Écoute</span>
+							   <span class="right-span">Auto 🎙️</span>
+						   </span>								
+					   	</label>
+					</div>
+
+					<div id="detector" class="vague">
+						<div class="note"><span id="note">--</span></div>   
+						<canvas id="output" width=300 height=42></canvas>
+					</div>
+					<div id="gauge">
+						<div id="pointer"></div>
+					</div>            
+
+					<div class="user-box">
+						<div id="Tension" class="vague">
+							<div class="tense">
+							<p>Tension : <input type="text" id="TenseEntry" value="800" oninput="Test();"></input></div> </p>
+						</div>
+		
+						<div id="Longueur" class="vague">
+							<div class="length">
+							<p>Longueur : <input type="text" id="LengthEntry" value="0.28" oninput="Test();"></input></div></p>
+						</div>
+						<div id="Masselineique" class="vague">
+							<div class="mass">
+							<p>Masse Linéique : <input type="text" id="LinearMassEntry" value="0.025" oninput="Test();"></input></div></p>  
+						</div>
+					</div>
+				</div>
+			</div>
 	</body>
 </html>
