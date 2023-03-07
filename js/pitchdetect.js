@@ -14,6 +14,7 @@ var detectorElem,
 var FreqGraph = [];
 var Compteur = 0;
 
+
 window.onload = function() {
 	Test();
 	audioContext = new AudioContext();
@@ -65,6 +66,9 @@ window.onload = function() {
 }
 
 function startPitchDetect() {
+			if(document.getElementById("tuto").checked == true){
+				alert("Veuillez taper au centre du rayon à l'aide d'un objet métallique après fermeture.");
+			}
 			// grab an audio context
 			audioContext = new AudioContext();
 
@@ -88,12 +92,14 @@ function startPitchDetect() {
 				analyser = audioContext.createAnalyser();
 				analyser.fftSize = 2048;
 				mediaStreamSource.connect( analyser );
+				console.log("avant pitch")
 				updatePitch();
+				console.log("après pitch")
 
 			}).catch((err) => {
 				// always check for errors at the end.
 				console.error(`${err.name}: ${err.message}`);
-				alert('Stream generation failed.');
+				//alert('Stream generation failed.');
 			});
 
 }
@@ -110,7 +116,7 @@ function togglePlayback() {
 		if (!window.cancelAnimationFrame)
 			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
         window.cancelAnimationFrame( rafID );
-        return "Stop";
+		return "Stop";
     }
 
     sourceNode = audioContext.createBufferSource();
@@ -146,7 +152,7 @@ function autoCorrelate( buf, sampleRate ) {
 		rms += val*val;
 	}
 	rms = Math.sqrt(rms/SIZE);
-	if (rms<0.015) // not enough signal 
+	if (rms<0.01) // not enough signal 
 		return -1;
 
 	var r1=0, r2=SIZE-1, thres=0.2;
@@ -182,29 +188,40 @@ function autoCorrelate( buf, sampleRate ) {
 }
 
 function updatePitch( time ) {
+	console.log("updatePitch");
 	var cycles = new Array;
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
-	// TODO: Paint confidence meter on canvasElem here.
 
  	if (ac == -1) {
+		console.log("ac == -1")
  		detectorElem.className = "vague";
 		noteElem.innerText = "--";
 		document.getElementById("reglage").innerText = "--";
  	} else {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
+		console.log(FreqGraph);
 
 		if(Math.round( pitch ) > 40 && Math.round( pitch ) < 1000){
 			FreqGraph.push([((FreqGraph.length)/60).toFixed(2), Math.round( pitch )]);
 		}
 
 		if (FreqGraph.length > 15) { //15 = 0.25s
-			//console.log(averagesimplified());
+			console.log("STOP")
+		
+			togglePlayback();
+			togglePlayback();
+			console.log(averagesimplified());
+			//alert("STOP EZ");
 			Reglage(averagesimplified());
 			updateGauge(averagesimplified());
+			//change the class of noteElem to "confident"
+			detectorElem.className = "confident";
 			noteElem.innerText = Math.round(averagesimplified()) + " Hz";
+			console.log(FreqGraph);
 			FreqGraph = [];
+			
 		}
 		
 	}
@@ -260,33 +277,50 @@ function averagesimplified(){
 	return avg;
 }
 
-//If there is text in the input of id="TenseEntry" then div.id="Tension"="confident"
-//Else div.id="Tension"="vague"
+
 function Test(){	
 
-	if (document.getElementById("LinearMassEntry").value != "" && document.getElementById("LengthEntry").value != "" && document.getElementById("TenseEntry").value != ""){
-		var Tense = document.getElementById("TenseEntry").value;
-		var Length = document.getElementById("LengthEntry").value;
-		var LinearMass = document.getElementById("LinearMassEntry").value;
-		var Freq = Math.round((1/(2*Length))*Math.sqrt(Tense/LinearMass));
-		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : "+Freq+" Hz";
-	}
-	else {document.getElementById("FreqAim").innerText = "Fréquence à obtenir : N/A";}
+	if (document.getElementById("density").value != "" && document.getElementById("LengthEntry").value != "" && document.getElementById("TenseEntry").value != "" && document.getElementById("diameter").value != ""){
+		document.getElementById("Tension").className = "confident";
+		document.getElementById("Longueur").className = "confident";
+		document.getElementById("Densité").className = "confident";
+		document.getElementById("Diametre").className = "confident";
 
-	if (document.getElementById("TenseEntry").value == ""){
-		document.getElementById("Tension").className = "vague";
-	}
-	else{document.getElementById("Tension").className = "confident";}
+		console.log("je teste");
 
-	if (document.getElementById("LengthEntry").value == ""){
-		document.getElementById("Longueur").className = "vague";
+		var Tension = document.getElementById("TenseEntry").value; // N
+		var Longueur = document.getElementById("LengthEntry").value * 0.01; // cm to m
+		var Masse_Volumique = document.getElementById("density").value; // kg/m3
+		var Diametre = document.getElementById("diameter").value * 0.001; // mm to m
+		var Masse = Masse_Volumique * Math.PI * Math.pow(Diametre,2) * Longueur / 4; // kg
+		var Masse_Lineique = Masse / Longueur ; // kg/m
+		console.log("Masse lineique : "+Masse_Lineique+" kg/m");
+		var Freq = Math.round((1/(2*Longueur))*Math.sqrt(Tension/Masse_Lineique));
+		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : "+(Number(Freq))+" Hz";
 	}
-	else{document.getElementById("Longueur").className = "confident";}
+	else {
+		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : N/A";
 
-	if (document.getElementById("LinearMassEntry").value == ""){
-		document.getElementById("Masselineique").className = "vague";
+		if (document.getElementById("TenseEntry").value == ""){
+			document.getElementById("Tension").className = "vague";
+		}
+		else{document.getElementById("Tension").className = "confident";}
+
+		if (document.getElementById("LengthEntry").value == ""){
+			document.getElementById("Longueur").className = "vague";
+		}
+		else{document.getElementById("Longueur").className = "confident";}
+
+		if (document.getElementById("density").value == ""){
+			document.getElementById("Densité").className = "vague";
+		}
+		else{document.getElementById("Densité").className = "confident";}
+
+		if (document.getElementById("diameter").value == ""){
+			document.getElementById("Diametre").className = "vague";
+		}
+		else{document.getElementById("Diametre").className = "confident";}
 	}
-	else{document.getElementById("Masselineique").className = "confident";}
 	
 }
 
@@ -300,14 +334,28 @@ function Reglage(pitch){
 		freq_theorique = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
 		console.log(freq_theorique);
 		
-		if (Number(pitch) < freq_theorique-10){
-			document.getElementById("reglage").innerText = "Augmenter la tension";
-			console.log("augmenter");
+		if (Number(pitch) < freq_theorique-5){
+			if (Number(pitch)<freq_theorique-15){
+				document.getElementById("reglage").innerText = "Serrer la vis de 180°";
+			}
+			else if (Number(pitch)<freq_theorique-10){
+				document.getElementById("reglage").innerText = "Serrer la vis de 90°";
+			}
+			else{	
+				document.getElementById("reglage").innerText = "Serrer la vis de 45°";
+			}
 		}
 
-		else if (Number(pitch) > freq_theorique+10){
-			document.getElementById("reglage").innerText = "Réduire la tension";
-			console.log("reduire");
+		else if (Number(pitch) > freq_theorique+5){
+			if (Number(pitch)>freq_theorique+15){
+				document.getElementById("reglage").innerText = "Désserrer la vis de 180°";
+			}
+			else if (Number(pitch)>freq_theorique+10){
+				document.getElementById("reglage").innerText = "Désserrer la vis de 90°";
+			}
+			else{	
+				document.getElementById("reglage").innerText = "Désserrer la vis de 45°";
+			}
 		}
 		
 		else if (Number(pitch) >= freq_theorique-10 && Number(pitch) <= freq_theorique+10){
@@ -327,7 +375,7 @@ function Reglage(pitch){
 function updateGauge(frequency){
 	var freqtohave = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
     var freqmax = 2*freqtohave;
-    var pointer = document.getElementById("pointer");
+	var pointer = document.getElementById("pointer");
     if(frequency < freqmax && frequency > 0){
       if(frequency < (freqtohave + (0.02*freqtohave)) && frequency > (freqtohave-(freqtohave*0.02))){
         pointer.style.left = "47%";

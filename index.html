@@ -15,6 +15,10 @@
 		<div class="topnav">
 			<a class="active" href="#index">Analyse</a>
 			<a href="GraphPage.html">Graphique</a>
+			<!-- Checkbox on the right of topnav -->
+			<label class="switch">
+				<input type="checkbox" id="tuto" checked>
+			</label>
 		</div>
 		<meta charset="utf-8">
 	</head>
@@ -22,7 +26,6 @@
 		<script src="js/pitchdetect.js"></script>
 		<div class="btn-group">
 			<button class="button" onclick="startPitchDetect();">Start</button>
-			<button	class="button" onclick="togglePlayback()">Stop</button>
 		</div>
 		<div>
 			<span id="FreqAim">Fréquence à obtenir : N/A</span>
@@ -60,7 +63,6 @@
 
 					<div id="detector" class="vague">
 						<div class="note"><span id="note">--</span></div>   
-						<canvas id="output" width=300 height=42></canvas>
 					</div>
 					<div id="gauge">
 						<div id="pointer"></div>
@@ -69,16 +71,19 @@
 					<div class="user-box">
 						<div id="Tension" class="vague">
 							<div class="tense">
-							<p>Tension : <input type="text" id="TenseEntry" value="800" oninput="Test();"></input></div> </p>
+							<p>Tension (N) : <input type="text" id="TenseEntry" value="650" oninput="Test();"></input></div> </p>
 						</div>
-		
 						<div id="Longueur" class="vague">
 							<div class="length">
-							<p>Longueur : <input type="text" id="LengthEntry" value="0.28" oninput="Test();"></input></div></p>
+							<p>Longueur (cm) : <input type="text" id="LengthEntry" value="28" oninput="Test();"></input></div></p>
 						</div>
-						<div id="Masselineique" class="vague">
+						<div id="Diametre" class="vague">
 							<div class="mass">
-							<p>Masse Linéique : <input type="text" id="LinearMassEntry" value="0.025" oninput="Test();"></input></div></p>  
+							<p>Diamètre (mm) : <input type="text" id="diameter" value="2" oninput="Test();"></input></div></p>  
+						</div>
+						<div id="Densité" class="vague">
+							<div class="density">
+							<p>Masse Volumique (kg/m^3) : <input type="text" id="density" value="7730" oninput="Test();"></input></div> </p>
 						</div>
 					</div>
 				</div>
