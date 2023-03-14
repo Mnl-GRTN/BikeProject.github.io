@@ -13,6 +13,7 @@ var detectorElem,
 	noteElem
 var FreqGraph = [];
 var Compteur = 0;
+var oscillator;
 
 
 window.onload = function() {
@@ -290,7 +291,7 @@ function Test(){
 
 		var Tension = document.getElementById("TenseEntry").value; // N
 		var Longueur = document.getElementById("LengthEntry").value * 0.01; // cm to m
-		var Masse_Volumique = document.getElementById("density").value; // kg/m3
+		var Masse_Volumique = document.getElementById("density").value * 1000; // density to kg/m3
 		var Diametre = document.getElementById("diameter").value * 0.001; // mm to m
 		var Masse = Masse_Volumique * Math.PI * Math.pow(Diametre,2) * Longueur / 4; // kg
 		var Masse_Lineique = Masse / Longueur ; // kg/m
@@ -395,14 +396,67 @@ function updateGauge(frequency){
       pointer.style.backgroundColor = "red";
     }
   }
+var oscil = "";
 
-function hideGauge(){
+function playSound(frequency) {
+	oscil = "running";
+	document.getElementById("buttonstart").innerText = "Stop";
+	oscillator = audioContext.createOscillator();
+	oscillator.frequency.value = frequency;
+	oscillator.connect(audioContext.destination);
+	oscillator.start();
+}
+
+function stopSound() {
+	document.getElementById("buttonstart").innerText = "Start";
+	oscil = "stopped";
+	oscillator.stop();
+}
+
+
+  function StartButton() {
 	if(document.getElementById("GaugeCheck").checked == true){
+		startPitchDetect();
+	}
+
+	else{
+		if (document.getElementById("FreqAim").innerText != "Fréquence à obtenir : N/A"){
+			if (oscillator && oscil == "running") {
+				// si l'oscillateur est en cours de lecture, arrête le son
+				console.log("stop");
+				stopSound();
+			} 
+			else {
+				// sinon, joue un son à la fréquence de 440 Hz
+				playSound(Number(document.getElementById("FreqAim").innerText.split(" ")[4]));
+				console.log("play");
+			}
+		}
+		else{
+			alert("Veuillez rentrer les paramètres de la corde");
+		}
+	}
+}
+
+
+function hideElements(){
+	console.log("changement état bouton");
+	if(document.getElementById("GaugeCheck").checked == true){
+		if (oscillator && oscil == "running") {
+			// si l'oscillateur est en cours de lecture, arrête le son
+			console.log("stop");
+			stopSound();
+		}
 		document.getElementById("gauge").style.display = "block";
 		document.getElementById("detector").style.height = "0%";
+		document.getElementById("reglage").innerText = "--";
+		document.getElementById("note").innerText = "--";
+
 	}
 	else{
 		document.getElementById("gauge").style.display = "none";
 		document.getElementById("detector").style.height = "5%";
+		document.getElementById("reglage").innerText = "";
+		document.getElementById("note").innerText = "";
 	}
 }

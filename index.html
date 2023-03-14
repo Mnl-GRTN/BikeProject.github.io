@@ -23,15 +23,8 @@
 	</head>
 	<body>
 		<script src="js/pitchdetect.js"></script>
-		<div class="btn-group">
-			<button class="button" onclick="startPitchDetect();">Start</button>
-		</div>
-		<div>
-			<span id="FreqAim">Fréquence à obtenir : N/A</span>
-		</div>
-		<div>
-			<span id="reglage">--</span>
-		</div>
+		
+		
 
 		<div class="Tuning">
 			<div class="outlinewheel">
@@ -50,7 +43,7 @@
 					<h4 style="text-align: center;">Tuning Panel</h4>
 
 					<div class="toggleContainer">             
-						<label class="toggleSwitch nolabel" onclick="hideGauge()">
+						<label class="toggleSwitch nolabel" onclick="hideElements()">
 						   <input id="GaugeCheck" type="checkbox" checked/>
 						   <a></a>
 						   <span>
@@ -58,6 +51,15 @@
 							   <span class="right-span">Auto 🎙️</span>
 						   </span>								
 					   	</label>
+					</div>
+					<div class="btn-group">
+						<button class="button" id="buttonstart" onclick="StartButton();">Start</button>
+					</div>
+					<div>
+						<span id="FreqAim">Fréquence à obtenir : N/A</span>
+					</div>
+					<div>
+						<span id="reglage">--</span>
 					</div>
 
 					<div id="detector" class="vague">
@@ -82,7 +84,7 @@
 						</div>
 						<div id="Densité" class="vague">
 							<div class="density">
-							<p>Masse Volumique (kg/m^3) : <input type="text" id="density" value="7730" oninput="Test();"></input></div> </p>
+							<p>Densité : <input type="text" id="density" value="7.730" oninput="Test();"></input></div> </p>
 						</div>
 					</div>
 				</div>
