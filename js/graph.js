@@ -208,7 +208,7 @@ function createGraph(){
 	var div = document.createElement("div");
 	div.id = "Graph"+Compteur;
 	//Change CSS of div.id to copy the Graph div css
-	div.style = "width: 500px; height: 400px; margin: 0 auto; background-color: #fff; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-bottom: 10px; margin-top: 10px;";
+	div.style = "width: 500px; height: 400px; margin: 0 auto; background-color: #fff; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-bottom: 10px; margin-top: 30px;";
 	div.style.paddingBottom = 1.5+"em";
 	//Ajouter un texte à div.id en UTF-8 avec la moyenne de la fréquence en utilisant averageGraph()
 	div.innerText = "Moyenne de la fréquence : "+averagesimplified().toFixed(2)+" Hz";

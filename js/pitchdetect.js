@@ -17,7 +17,7 @@ var oscillator;
 
 
 window.onload = function() {
-	Test();
+	InitialisationVariables();
 	audioContext = new AudioContext();
 	MAX_SIZE = Math.max(4,Math.floor(audioContext.sampleRate/5000));	// corresponds to a 5kHz signal
 
@@ -279,7 +279,7 @@ function averagesimplified(){
 }
 
 
-function Test(){	
+function InitialisationVariables(){	
 
 	if (document.getElementById("density").value != "" && document.getElementById("LengthEntry").value != "" && document.getElementById("TenseEntry").value != "" && document.getElementById("diameter").value != ""){
 		document.getElementById("Tension").className = "confident";
@@ -415,7 +415,7 @@ function stopSound() {
 
 
   function StartButton() {
-	if(document.getElementById("GaugeCheck").checked == true){
+	if(document.getElementById("Mode").checked == true){
 		startPitchDetect();
 	}
 
@@ -441,8 +441,8 @@ function stopSound() {
 
 function hideElements(){
 	console.log("changement état bouton");
-	if(document.getElementById("GaugeCheck").checked == true){
-		if (oscillator && oscil == "running") {
+	if(document.getElementById("Mode").checked == true){
+		if (oscillator && oscil == "running") {	
 			// si l'oscillateur est en cours de lecture, arrête le son
 			console.log("stop");
 			stopSound();
@@ -451,9 +451,10 @@ function hideElements(){
 		document.getElementById("detector").style.height = "0%";
 		document.getElementById("reglage").innerText = "--";
 		document.getElementById("note").innerText = "--";
-
 	}
 	else{
+		freqtohave = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
+		updateGauge(freqtohave);
 		document.getElementById("gauge").style.display = "none";
 		document.getElementById("detector").style.height = "5%";
 		document.getElementById("reglage").innerText = "";

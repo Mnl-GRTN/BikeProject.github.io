@@ -40,51 +40,49 @@
 
 			<div class="ControlPanel">
 				<div class="ControlTuner">
-					<h4 style="text-align: center;">Tuning Panel</h4>
+					<div class="Controlelements">
+						<h4 style="text-align: center;">Tuning Panel</h4>
 
-					<div class="toggleContainer">             
-						<label class="toggleSwitch nolabel" onclick="hideElements()">
-						   <input id="GaugeCheck" type="checkbox" checked/>
-						   <a></a>
-						   <span>
-							   <span class="left-span">🎧 Écoute</span>
-							   <span class="right-span">Auto 🎙️</span>
-						   </span>								
-					   	</label>
-					</div>
-					<div class="btn-group">
-						<button class="button" id="buttonstart" onclick="StartButton();">Start</button>
-					</div>
-					<div>
-						<span id="FreqAim">Fréquence à obtenir : N/A</span>
-					</div>
-					<div>
-						<span id="reglage">--</span>
-					</div>
+						<div class="toggleContainer">             
+							<label class="toggleSwitch nolabel" onclick="hideElements()">
+							<input id="Mode" type="checkbox" checked/>
+							<a></a>
+							<span>
+								<span class="left-span">🎧 Écoute</span>
+								<span class="right-span">Auto 🎙️</span>
+							</span>								
+							</label>
+						</div>
+						<div class="btn-group">
+							<button class="button" id="buttonstart" onclick="StartButton();">Start</button>
+						</div>
 
-					<div id="detector" class="vague">
-						<div class="note"><span id="note">--</span></div>   
-					</div>
-					<div id="gauge">
-						<div id="pointer"></div>
-					</div>            
+							<div class="centered" id="FreqAim">Fréquence à obtenir : N/A</div>
 
-					<div class="user-box">
-						<div id="Tension" class="vague">
-							<div class="tense">
-							<p>Tension (N) : <input type="text" id="TenseEntry" value="650" oninput="Test();"></input></div> </p>
+						<div id="detector" class="vague">
+							<div class="note"><span id="note">--</span></div>   
 						</div>
-						<div id="Longueur" class="vague">
-							<div class="length">
-							<p>Longueur (cm) : <input type="text" id="LengthEntry" value="28" oninput="Test();"></input></div></p>
+						<div id="gauge">
+							<div id="pointer"></div>
 						</div>
-						<div id="Diametre" class="vague">
-							<div class="mass">
-							<p>Diamètre (mm) : <input type="text" id="diameter" value="2" oninput="Test();"></input></div></p>  
-						</div>
-						<div id="Densité" class="vague">
-							<div class="density">
-							<p>Densité : <input type="text" id="density" value="7.730" oninput="Test();"></input></div> </p>
+							<div class="centered" id="reglage">--</div>
+						<div class="user-box">
+							<div id="Tension" class="vague">
+								<div class="tense">
+								<p>Tension (N) : <input type="text" id="TenseEntry" value="650" oninput="Test();"></input></div> </p>
+							</div>
+							<div id="Longueur" class="vague">
+								<div class="length">
+								<p>Longueur (cm) : <input type="text" id="LengthEntry" value="28" oninput="Test();"></input></div></p>
+							</div>
+							<div id="Diametre" class="vague">
+								<div class="mass">
+								<p>Diamètre (mm) : <input type="text" id="diameter" value="2" oninput="Test();"></input></div></p>  
+							</div>
+							<div id="Densité" class="vague">
+								<div class="density">
+								<p>Densité : <input type="text" id="density" value="7.730" oninput="Test();"></input></div> </p>
+							</div>
 						</div>
 					</div>
 				</div>

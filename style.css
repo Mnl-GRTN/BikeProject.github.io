@@ -10,7 +10,8 @@ html{
 .topnav {
     background-color: #020826;
     overflow: hidden;
-    position: fixed;
+    position: relative;
+    margin-bottom: 2%;
     width: 100%;
     z-index: 1;
   }
@@ -27,6 +28,12 @@ html{
     font-size: 17px;
   }
   
+.centered{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
   /* Change the color of links on hover */
 .topnav a:hover {
     background-color: #eaddcf;
@@ -41,21 +48,19 @@ html{
   }
 
   .switch {
-    /* Place on the left */
-    float: right;
-    /* center vertically and horizontally */
-    vertical-align: middle;
-  
+    /* Place on the left and center vertically */
+    position: absolute;
+    top: 25%;
+    right: 0%;
   }
 
 #detector { display:relative; width : 50%; height:0%; text-align: center; padding-top: 0%; margin-top: 0.5em; margin-left: 25%;}
 #note { font-size: 24px; }
 div.vague{ color: lightgray}
 div.confident{ color: black}
-/* Responsive navbar - display links on top of each other instead of side by side on small screens */
-/* Display bigger navbar on small screens */
+
 .btn-group{
-  width: 50%; margin-left: 25%; display: flex; justify-content: space-evenly; 
+  width: 50%; margin-left: 25%; display: flex; justify-content: space-evenly; margin-bottom: 0.5em ; 
 }
 .button{
   display: inline-block;
@@ -66,7 +71,6 @@ div.confident{ color: black}
   background: radial-gradient( 100% 100% at 100% 0%, #5f93f8 0%, #5f93f8 100% );
   box-shadow: 0px 2px 4px rgb(45 35 66 / 40%), 0px 7px 13px -3px rgb(45 35 66 / 30%), inset 0px -3px 0px rgb(58 65 111 / 50%);
   padding: 0 50px;
-  margin-top: 3.5em;
   border-radius: 6px;
   color: #fff;
   height: 40px;
@@ -84,32 +88,39 @@ div.confident{ color: black}
 }
 
 .Tuning{ /* #F9F6EE */
-  width: 70%; height: 550px; margin-left: 15%; padding-bottom: 1em; background-color: #f7f7f7; border-radius: 2em; border: 0.7em solid #ECF2F8;
+  width: 70%; height: 80%; margin-left: 15%; padding-bottom: 1em; background-color: #f7f7f7; border-radius: 2em; border: 0.7em solid #ECF2F8;
   display: flex;
   flex-direction: row;
   flex-direction: right;
 }
 
 .outlinewheel{
-  height: 450px;
-  padding: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 50%;
-  padding-top: 144px;
 }
 
 .ControlPanel{
-  margin: 3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 50%;
 }
 
 .ControlTuner{
-  margin-top: 10%;
-  margin-right: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px #e6e6e6 solid;
   height: 90%;
-  width: 80%;
+  width: 70%;
   border-radius: 2em;
   background-color: #fcfbfa;
+}
+
+.Controlelements{
+  position:absolute;
 }
 
 #gauge {
@@ -117,7 +128,7 @@ div.confident{ color: black}
   height: 10px;
   background-color: #ddd;
   position: relative;
-  margin: 50px auto;
+  margin: 4% auto;
   border-radius: 1em;
 }
 
@@ -243,9 +254,6 @@ div.confident{ color: black}
     font-size: 48px;
   }
 
-  #FreqAim,#reglage{
-    font-size: 30px
-  }
   .Tuning{ /* #F9F6EE */
     width: 82%; height: 68%; margin-left: 5%; padding-bottom: 1em; background-color: #F9F6EE; border-radius: 2em; border: 2em solid #ECF2F8;
     display: flex;
