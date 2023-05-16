@@ -143,7 +143,7 @@
   width: 27px;
   }
   .toggleSwitch.large > span {
-  height: 29px;
+  height: 21px;
   line-height: 28px;
   }
   .toggleSwitch.large input:checked ~ a {
@@ -203,6 +203,28 @@
   .ControlTuner .user-box input:valid{
     border: 1px solid #5f93f8;
     text-indent: 1em;
+  }
+
+  @media only screen and (max-device-width: 480px) {
+    .toggleSwitch > span span {
+      line-height:68px;
+      font-size: 1.5em;
+      }
+      
+      .toggleSwitch {
+        height: 36px;
+        width: 400px;
+        height:68px;
+        margin-bottom: 2em;
+      }
+
+      .ControlTuner .user-box{
+        font-size: 32px;
+      }
+
+      .ControlTuner .user-box input{
+        font-size: 36px;
+      }
   }
 
   /* CREATE A VIEW INFERIOR TO 1100PX */

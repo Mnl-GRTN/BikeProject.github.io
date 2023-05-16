@@ -7,6 +7,66 @@ html{
     font-size: 100%;
 }
 /* Responsive navbar with div clas="topnav" on Top of the page without any border with a black background and Add a background-color #f25042 to the active,current link */
+/* shit things  */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+  margin-left: auto;
+}
+.switch-container{
+  display: flex;
+  margin-left: auto;
+  justify-content: flex-end;
+  margin-top: 0.8em;
+
+}
+
+.switch input {
+  display: none;
+}
+
+.switch-text {
+  font-size: 17px;
+  margin-left: 0;
+  color: white;
+}  
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 15px;
+  transition: background-color 0.4s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #5f93f8;
+}
+
+input:checked + .slider:before {
+  transform: translateX(14px);
+}
+/* end of shit things */
+
+
 .topnav {
     background-color: #020826;
     overflow: hidden;
@@ -14,6 +74,7 @@ html{
     margin-bottom: 2%;
     width: 100%;
     z-index: 1;
+    display: flex;
   }
   
 /* Style the links inside the navigation bar */
@@ -36,9 +97,7 @@ html{
 
   /* Change the color of links on hover */
 .topnav a:hover {
-    background-color: #eaddcf;
-
-    color: black;
+    background-color: #5f93f8;
   }
   
   /* Add a color to the active/current link */
@@ -47,12 +106,7 @@ html{
     color: white;
   }
 
-  .switch {
-    /* Place on the left and center vertically */
-    position: absolute;
-    top: 25%;
-    right: 0%;
-  }
+
 
 #detector { display:relative; width : 50%; height:0%; text-align: center; padding-top: 0%; margin-top: 0.5em; margin-left: 25%;}
 #note { font-size: 24px; }
@@ -60,7 +114,7 @@ div.vague{ color: lightgray}
 div.confident{ color: black}
 
 .btn-group{
-  width: 50%; margin-left: 25%; display: flex; justify-content: space-evenly; margin-bottom: 0.5em ; 
+  width: 50%; margin-left: 25%; display: flex; justify-content: space-evenly; margin-bottom: 0.8em ; 
 }
 .button{
   display: inline-block;
@@ -120,7 +174,7 @@ div.confident{ color: black}
 }
 
 .Controlelements{
-  position:absolute;
+  position : relative;
 }
 
 #gauge {
@@ -207,15 +261,30 @@ div.confident{ color: black}
 
 
 @media only screen and (max-device-width: 480px) {
-  .buttonStart, .buttonStop {
+
+
+
+  .topnav {
+    background-color: #020826;
+    display : block;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2%;
+    width: 100%;
+    z-index: 1;
+  }
+
+  h4, #FreqAim, #reglage{
+    font-size: 36px;
+  }
+
+  .buttonstart {
     height: 5em;
     width: 5em;
     border-radius: 15%;
     font-size: 58px;
     background-color: lightgray;
     cursor:pointer;
-
-
   }  
   .buttonStart{
     position: absolute;
@@ -223,19 +292,13 @@ div.confident{ color: black}
     top: 5em;
     transform: translate(-125%, -50%);
   }
-  .buttonStop{
-    position: absolute;
-    left: 50%;
-    top: 5em;
-    transform: translate(25%, -50%);
-  }
   
-  .buttonStart:hover, .buttonStop:hover {
+  .buttonStart:hover {
     color:white;
  }
 
   .topnav a {
-    font-size: 58px;
+    font-size: 48px;
   }
   
   .active{
@@ -249,13 +312,13 @@ div.confident{ color: black}
 
   .button{
     padding: 0 1.5em;
-    margin-top: 3.5em;
-    height: 3em;
+    height: 2em;
+    border-radius: 5%;
     font-size: 48px;
   }
 
   .Tuning{ /* #F9F6EE */
-    width: 82%; height: 68%; margin-left: 5%; padding-bottom: 1em; background-color: #F9F6EE; border-radius: 2em; border: 2em solid #ECF2F8;
+    width: 82%; height: 90%; margin-left: 5%; padding-bottom: 1em; border-radius: 2em; border: 2em solid #ECF2F8;
     display: flex;
     flex-direction: column;
     flex-direction: top;
@@ -266,7 +329,7 @@ div.confident{ color: black}
     display:flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 50%;
     padding: 0%;
     width: 100%;
   }
@@ -303,4 +366,118 @@ div.confident{ color: black}
     text-align: center;
     background-color: #fcfbfa;
   }
+
+  #gauge {
+    height: 20px;
+  }
+  
+  #pointer {
+    height: 20px;
+  }
+
+}
+
+@media only screen and (max-device-width: 700px) and (min-device-width: 481px){
+
+  h4, #FreqAim, #reglage{
+    font-size: 36px;
+  }
+
+  .buttonstart {
+    height: 5em;
+    width: 5em;
+    border-radius: 15%;
+    font-size: 42px;
+    background-color: lightgray;
+    cursor:pointer;
+  }  
+  .buttonStart{
+    position: absolute;
+    left: 50%;
+    top: 5em;
+    transform: translate(-125%, -50%);
+  }
+  
+  .buttonStart:hover {
+    color:white;
+ }
+
+  .topnav a {
+    font-size: 48px;
+  }
+  
+  .active{
+    /* Center in 2em high div */
+    line-height: 2em;
+  }
+
+  .btn-group{
+    width: 100%; margin-left: 0%; display: flex; padding-bottom: 5%;
+  }
+
+  .button{
+    padding: 0 1.5em;
+    height: 2em;
+    border-radius: 5%;
+    font-size: 42px;
+  }
+
+  .Tuning{ /* #F9F6EE */
+    width: 82%; height: 86%; margin-left: 5%; padding-bottom: 1em; border-radius: 2em; border: 2em solid #ECF2F8;
+    display: flex;
+    flex-direction: column;
+    flex-direction: top;
+    overflow: none;
+  }
+
+  .outlinewheel{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height: 70%;
+    padding: 0%;
+    width: 100%;
+  }
+
+  .wheel {
+    width: 350px;
+    height: 350px;
+  }
+  
+  .wheel::before {
+    width: 362px; /* smaller than the wheel to create a gap */
+    height: 362px;
+  }
+  
+  .spoke {
+    height: 350px; /* diameter of the wheel */
+    left: 173.5px; /* half of the width of the wheel */
+  }
+
+  .ControlPanel{
+    width: 100%;
+    height: 100%;
+  }
+  
+  .ControlTuner{
+    margin-top: 0%;
+    margin-left: 2%;
+    height: 100%;
+    width: 90%;
+  }
+
+  #TenseEntry,#LengthEntry,#density,#diameter{
+    width: 50%;
+    text-align: center;
+    background-color: #fcfbfa;
+  }
+
+  #gauge {
+    height: 20px;
+  }
+  
+  #pointer {
+    height: 20px;
+  }
+
 }

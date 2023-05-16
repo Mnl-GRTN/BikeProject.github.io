@@ -440,7 +440,7 @@ function stopSound() {
 
 
 function hideElements(){
-	console.log("changement état bouton");
+	 console.log("changement état bouton");
 	if(document.getElementById("Mode").checked == true){
 		if (oscillator && oscil == "running") {	
 			// si l'oscillateur est en cours de lecture, arrête le son
@@ -456,8 +456,8 @@ function hideElements(){
 		freqtohave = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
 		updateGauge(freqtohave);
 		document.getElementById("gauge").style.display = "none";
-		document.getElementById("detector").style.height = "5%";
-		document.getElementById("reglage").innerText = "";
-		document.getElementById("note").innerText = "";
-	}
+		document.getElementById("detector").style.height = "0%";
+		document.getElementById("reglage").innerText = "  \n"+" \n"+" \n";
+		document.getElementById("note").innerText = "  ";
+	} 
 }
