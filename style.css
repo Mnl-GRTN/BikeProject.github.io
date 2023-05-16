@@ -64,7 +64,6 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(14px);
 }
-/* end of shit things */
 
 
 .topnav {
@@ -171,10 +170,11 @@ div.confident{ color: black}
   width: 70%;
   border-radius: 2em;
   background-color: #fcfbfa;
+  transition: ease-in-out 0.5s;
 }
 
 .Controlelements{
-  position : relative;
+  position:absolute;
 }
 
 #gauge {
@@ -262,16 +262,62 @@ div.confident{ color: black}
 
 @media only screen and (max-device-width: 480px) {
 
+  .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 15px;
+    transition: background-color 0.4s;
+  }
+  
+  .slider:before {
+    content: "";
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #5f93f8;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(28px);
+  }
 
+  .switch {
+  position: relative;
+  display: inline-block;
+  width: 64px;
+  height: 36px;
+  margin-left: 10px;
+  margin-bottom: -0.3em;
+}
+
+.switch-container{
+  display: block;
+  float : right;
+  justify-content: flex-end;
+  margin-right: 1em;
+  margin-top: 2.2em;
+}
+.switch-text {
+  display: inline-block;
+  font-size: 32px;
+  margin-left: 0;
+  color: white;
+}  
 
   .topnav {
-    background-color: #020826;
-    display : block;
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 2%;
-    width: 100%;
-    z-index: 1;
+    display : inline-block;
   }
 
   h4, #FreqAim, #reglage{
@@ -332,6 +378,8 @@ div.confident{ color: black}
     height: 50%;
     padding: 0%;
     width: 100%;
+    -webkit-transform: scale(1);
+    transform: ease-in-out 0.5s;
   }
 
   .wheel {
@@ -378,6 +426,64 @@ div.confident{ color: black}
 }
 
 @media only screen and (max-device-width: 700px) and (min-device-width: 481px){
+
+  .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 15px;
+    transition: background-color 0.4s;
+  }
+  
+  .slider:before {
+    content: "";
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #5f93f8;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(28px);
+  }
+
+    .switch {
+    position: relative;
+    display: inline-block;
+    width: 64px;
+    height: 36px;
+    margin-left: 10px;
+    margin-bottom: -0.3em;
+  }
+
+  .switch-container{
+    display: block;
+    float : right;
+    justify-content: flex-end;
+    margin-right: 1em;
+    margin-top: 2.4em;
+  }
+  .switch-text {
+    display: inline-block;
+    font-size: 32px;
+    margin-left: 0;
+    color: white;
+  }  
+
+  .topnav {
+    display : inline-block;
+  }
 
   h4, #FreqAim, #reglage{
     font-size: 36px;
