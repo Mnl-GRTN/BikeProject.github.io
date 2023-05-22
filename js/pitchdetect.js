@@ -15,7 +15,6 @@ var FreqGraph = [];
 var Compteur = 0;
 var oscillator;
 
-
 window.onload = function() {
 	InitialisationVariables();
 	audioContext = new AudioContext();
@@ -53,16 +52,6 @@ window.onload = function() {
 	  	reader.readAsArrayBuffer(e.dataTransfer.files[0]);
 	  	return false;
 	};
-	
-	fetch('whistling3.ogg')
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error(`HTTP error, status = ${response.status}`);
-			}
-			return response.arrayBuffer();
-		}).then((buffer) => audioContext.decodeAudioData(buffer)).then((decodedData) => {
-			theBuffer = decodedData;
-		});
 
 }
 
@@ -72,7 +61,7 @@ function startPitchDetect() {
 			}
 			// grab an audio context
 			audioContext = new AudioContext();
-
+			changeTextWithBlur("Veuillez activer votre microphone.");
 			// Attempt to get audio input
 			navigator.mediaDevices.getUserMedia(
 			{
@@ -94,17 +83,32 @@ function startPitchDetect() {
 				analyser.fftSize = 2048;
 				mediaStreamSource.connect( analyser );
 				console.log("avant pitch")
+				changeTextWithBlur("Veuillez taper au centre du rayon à l'aide d'un objet métallique.");
 				updatePitch();
 				console.log("après pitch")
+				//Add class active to the class hand
+				document.getElementById("hammer").className = "hand active";
 
 			}).catch((err) => {
 				// always check for errors at the end.
 				console.error(`${err.name}: ${err.message}`);
-				//alert('Stream generation failed.');
+				changeTextWithBlur("Appuyez sur le bouton Start pour commencer !");
+				alert("Vous devez activer votre microphone pour utiliser cette fonctionnalité.");
 			});
 
 }
+function changeTextWithBlur(newText) {
+	var helpingText = document.getElementById("helpingtext");
+	helpingText.classList.add("text-blur"); // Apply blur effect
 
+	setTimeout(function() {
+	  helpingText.innerText = newText; // Change the text
+
+	  setTimeout(function() {
+		helpingText.classList.remove("text-blur"); // Remove blur effect
+	  }, 50); // Delay before removing blur effect (500ms = 0.5s)
+	}, 100); // Delay before changing the text (500ms = 0.5s)
+  }
 
 function togglePlayback() {
     if (isPlaying) {
@@ -117,6 +121,7 @@ function togglePlayback() {
 		if (!window.cancelAnimationFrame)
 			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
         window.cancelAnimationFrame( rafID );
+		document.getElementById("hammer").className = "hand inactive";
 		return "Stop";
     }
 
@@ -132,7 +137,7 @@ function togglePlayback() {
     isLiveInput = false;
 
     updatePitch();
-
+	document.getElementById("hammer").className = "hand inactive";
     return "Stop";
 }
 
@@ -208,7 +213,7 @@ function updatePitch( time ) {
 			FreqGraph.push([((FreqGraph.length)/60).toFixed(2), Math.round( pitch )]);
 		}
 
-		if (FreqGraph.length > 15) { //15 = 0.25s
+		if (FreqGraph.length > 60) { //15 = 0.25s
 			console.log("STOP")
 		
 			togglePlayback();
@@ -220,6 +225,12 @@ function updatePitch( time ) {
 			//change the class of noteElem to "confident"
 			detectorElem.className = "confident";
 			noteElem.innerText = Math.round(averagesimplified()) + " Hz";
+			if(document.getElementById("reglage").innerText != "Parfait!"){
+				changeTextWithBlur("Fréquence du rayon : " + noteElem.innerText + ". Veuillez suivre les instructions ci-dessous et recommencer.");
+			}
+			else{
+				changeTextWithBlur("Fréquence du rayon : " + noteElem.innerText + ". Félicitations, vous avez réussi à accorder votre rayon !");
+			}
 			console.log(FreqGraph);
 			FreqGraph = [];
 			
@@ -288,7 +299,7 @@ function InitialisationVariables(){
 		document.getElementById("Diametre").className = "confident";
 
 		console.log("je teste");
-
+		changeTextWithBlur("Appuyez sur le bouton Start pour commencer !");
 		var Tension = document.getElementById("TenseEntry").value; // N
 		var Longueur = document.getElementById("LengthEntry").value * 0.01; // cm to m
 		var Masse_Volumique = document.getElementById("density").value * 1000; // density to kg/m3
@@ -296,11 +307,12 @@ function InitialisationVariables(){
 		var Masse = Masse_Volumique * Math.PI * Math.pow(Diametre,2) * Longueur / 4; // kg
 		var Masse_Lineique = Masse / Longueur ; // kg/m
 		console.log("Masse lineique : "+Masse_Lineique+" kg/m");
-		var Freq = Math.round((1/(2*Longueur))*Math.sqrt(Tension/Masse_Lineique));
+		var Freq = Math.round((1/(2*Longueur))*Math.sqrt(Tension/Masse_Lineique)) + 39;
 		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : "+(Number(Freq))+" Hz";
 	}
 	else {
 		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : N/A";
+		changeTextWithBlur("Veuillez entrer les paramètres du rayon.");
 
 		if (document.getElementById("TenseEntry").value == ""){
 			document.getElementById("Tension").className = "vague";
@@ -440,6 +452,7 @@ function stopSound() {
 
 
 function hideElements(){
+	document.getElementById("hammer").className = "hand inactive";
 	 console.log("changement état bouton");
 	if(document.getElementById("Mode").checked == true){
 		if (oscillator && oscil == "running") {	
@@ -457,7 +470,7 @@ function hideElements(){
 		updateGauge(freqtohave);
 		document.getElementById("gauge").style.display = "none";
 		document.getElementById("detector").style.height = "0%";
-		document.getElementById("reglage").innerText = "  \n"+" \n"+" \n";
-		document.getElementById("note").innerText = "  ";
+		document.getElementById("reglage").innerText = "";
+		document.getElementById("note").innerText = " ";
 	} 
 }

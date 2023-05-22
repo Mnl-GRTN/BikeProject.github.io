@@ -149,15 +149,50 @@ div.confident{ color: black}
 
 .outlinewheel{
   display: flex;
+  margin-top : 5%;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+}
+
+.Animated{
+  display: flex;
+  height: 70%;
   justify-content: center;
   align-items: center;
-  width: 50%;
+  margin-top: -5%;
+  transform:scale(0.9)
+}
+
+.description{
+  display: block;
+  /* Align vertically for block display */
+  text-align: center;
+  border: 1px #e6e6e6 solid;
+  height: 30%;
+  width: 90%;
+  margin-left: 15%;
+  border-radius: 2em;
+  background-color: #fcfbfa;
+  transition: ease-in-out 0.5s;
+  box-sizing: border-box;
+  padding: 0.5em;
+}
+
+#helpingtext{
+  color:#5b88e2;
+  font-weight: bold;
+  transition: filter 0.3s ease-in-out;
+}
+
+.text-blur{
+  filter: blur(5px);
 }
 
 .ControlPanel{
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-top: 5%;
   width: 50%;
 }
 
@@ -228,6 +263,23 @@ div.confident{ color: black}
   transform: rotate(10deg);
 }
 
+.hand.inactive {
+  z-index: 1;
+  position: relative;
+  animation-play-state: paused;
+}
+
+.hand.active {
+  /* put the image in the frontground*/
+  z-index: 1;
+  position: relative;
+  animation-name: translate_hand;
+  animation-duration: 1s;
+  animation-iteration-count: 3;
+  animation-timing-function: linear;
+  animation-play-state: running;
+}
+
 .spoke {
   width: 3px;
   height: 250px; /* diameter of the wheel */
@@ -244,21 +296,25 @@ div.confident{ color: black}
 .spoke6 {transform: rotate(180deg);}
 
 
-/* Rotate the wheel and the spokes when hovered */
-@keyframes rotate {
+
+
+@keyframes translate_hand {
   0% {
-    transform: rotate(0deg);
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(60px);
+  }
+  50% {
+    transform: translateX(60px) rotate(90deg);
+  }
+  75% {
+    transform: translateX(60px) rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: translateX(0);
   }
 }
-
-.wheel:hover
-{
-  animation-play-state: running;
-}
-
 
 @media only screen and (max-device-width: 480px) {
 

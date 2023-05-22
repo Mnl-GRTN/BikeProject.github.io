@@ -11,6 +11,7 @@
 		<link rel="icon" type="image/png" href="icons/favicon-32x32.png" sizes="any" />
 		<!-- Try Graph Head-->
 		<script src="./js/anychart-base.min.js"></script>
+		<script src="js/pitchdetect.js"></script>
 		<div class="topnav">
 			<a class="active" href="#index">Analyse</a>
 			<a href="GraphPage.html">Graphique</a>
@@ -27,19 +28,28 @@
 		<meta charset="utf-8">
 	</head>
 	<body>
-		<script src="js/pitchdetect.js"></script>
 		
 		
 
 		<div class="Tuning">
 			<div class="outlinewheel">
-				<div class="wheel">
-					<div class="spoke spoke1"></div>
-					<div class="spoke spoke2"></div>
-					<div class="spoke spoke3"></div>
-					<div class="spoke spoke4"></div>
-					<div class="spoke spoke5"></div>
-					<div class="spoke spoke6"></div>
+				<div class="description">
+					<h4>Description Panel :</h4>
+					<p id="helpingtext"> Appuyez sur le bouton Start pour commencer !</p>
+					<div class="centered" id="reglage">--</div>
+				</div>
+				<div class="Animated">
+					<div class="hand inactive" id="hammer">
+						<img src="icons/ha.png" height="130px" width="130px">
+					</div>
+					<div class="wheel">
+						<div class="spoke spoke1"></div>
+						<div class="spoke spoke2"></div>
+						<div class="spoke spoke3"></div>
+						<div class="spoke spoke4"></div>
+						<div class="spoke spoke5"></div>
+						<div class="spoke spoke6"></div>
+					</div>
 				</div>
 			</div>
 
@@ -61,7 +71,6 @@
 						<div class="btn-group">
 							<button class="button" id="buttonstart" onclick="StartButton();">Start</button>
 						</div>
-
 							<div class="centered" id="FreqAim">Fréquence à obtenir : N/A</div>
 
 						<div id="detector" class="vague">
@@ -70,7 +79,7 @@
 						<div id="gauge">
 							<div id="pointer"></div>
 						</div>
-							<div class="centered" id="reglage">--</div>
+							<!-- <div class="centered" id="reglage">--</div> -->
 						<div class="user-box">
 							<div id="Tension" class="vague">
 								<div class="tense">
