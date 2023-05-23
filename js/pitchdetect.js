@@ -63,29 +63,15 @@ function startPitchDetect() {
 			audioContext = new AudioContext();
 			changeTextWithBlur("Veuillez activer votre microphone.");
 			// Attempt to get audio input
-			navigator.mediaDevices.getUserMedia(
-			{
-				"audio": {
-					"mandatory": {
-						"googEchoCancellation": "false",
-						"googAutoGainControl": "false",
-						"googNoiseSuppression": "false",
-						"googHighpassFilter": "false"
-					},
-					"optional": []
-				},
-			}).then((stream) => {
+			navigator.mediaDevices.getUserMedia({"audio": "true"}).then((stream) => {
 				// Create an AudioNode from the stream.
 				mediaStreamSource = audioContext.createMediaStreamSource(stream);
-
 				// Connect it to the destination.
 				analyser = audioContext.createAnalyser();
 				analyser.fftSize = 2048;
 				mediaStreamSource.connect( analyser );
-				console.log("avant pitch")
 				changeTextWithBlur("Veuillez taper au centre du rayon à l'aide d'un objet métallique.");
 				updatePitch();
-				console.log("après pitch")
 				//Add class active to the class hand
 				document.getElementById("hammer").className = "hand active";
 
@@ -194,44 +180,43 @@ function autoCorrelate( buf, sampleRate ) {
 }
 
 function updatePitch( time ) {
-	console.log("updatePitch");
 	var cycles = new Array;
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
 
  	if (ac == -1) {
-		console.log("ac == -1")
  		detectorElem.className = "vague";
 		noteElem.innerText = "--";
 		document.getElementById("reglage").innerText = "--";
  	} else {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
-		console.log(FreqGraph);
 
 		if(Math.round( pitch ) > 40 && Math.round( pitch ) < 1000){
 			FreqGraph.push([((FreqGraph.length)/60).toFixed(2), Math.round( pitch )]);
 		}
 
-		if (FreqGraph.length > 60) { //15 = 0.25s
-			console.log("STOP")
+		if (FreqGraph.length > 50) { //15 = 0.25s
 		
 			togglePlayback();
 			togglePlayback();
-			console.log(averagesimplified());
 			//alert("STOP EZ");
 			Reglage(averagesimplified());
 			updateGauge(averagesimplified());
 			//change the class of noteElem to "confident"
 			detectorElem.className = "confident";
 			noteElem.innerText = Math.round(averagesimplified()) + " Hz";
-			if(document.getElementById("reglage").innerText != "Parfait!"){
-				changeTextWithBlur("Fréquence du rayon : " + noteElem.innerText + ". Veuillez suivre les instructions ci-dessous et recommencer.");
-			}
-			else{
+			var parametres = VariablesInitialisees();
+			console.log("parametres"+parametres);
+			if(document.getElementById("reglage").innerText == "Parfait!"){
 				changeTextWithBlur("Fréquence du rayon : " + noteElem.innerText + ". Félicitations, vous avez réussi à accorder votre rayon !");
 			}
-			console.log(FreqGraph);
+			else if (parametres == false){
+				changeTextWithBlur("Veuillez entrer les paramètres de votre rayon dans la section correspondante.");
+			}
+			else{
+				changeTextWithBlur("Fréquence du rayon : " + noteElem.innerText + ". Veuillez suivre les instructions ci-dessous et recommencer.");
+			}
 			FreqGraph = [];
 			
 		}
@@ -289,6 +274,14 @@ function averagesimplified(){
 	return avg;
 }
 
+function VariablesInitialisees(){
+	if (document.getElementById("density").value != "" && document.getElementById("LengthEntry").value != "" && document.getElementById("TenseEntry").value != "" && document.getElementById("diameter").value != ""){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 
 function InitialisationVariables(){	
 
@@ -297,16 +290,18 @@ function InitialisationVariables(){
 		document.getElementById("Longueur").className = "confident";
 		document.getElementById("Densité").className = "confident";
 		document.getElementById("Diametre").className = "confident";
-
-		console.log("je teste");
-		changeTextWithBlur("Appuyez sur le bouton Start pour commencer !");
+		if (document.getElementById("Mode").checked == true){
+			changeTextWithBlur("Appuyez sur le bouton Start pour commencer !");
+		}
+		else{
+			changeTextWithBlur("Appuyez sur le bouton Start afin de commencer le réglage en fonction du son émis !");
+		}
 		var Tension = document.getElementById("TenseEntry").value; // N
 		var Longueur = document.getElementById("LengthEntry").value * 0.01; // cm to m
 		var Masse_Volumique = document.getElementById("density").value * 1000; // density to kg/m3
 		var Diametre = document.getElementById("diameter").value * 0.001; // mm to m
 		var Masse = Masse_Volumique * Math.PI * Math.pow(Diametre,2) * Longueur / 4; // kg
 		var Masse_Lineique = Masse / Longueur ; // kg/m
-		console.log("Masse lineique : "+Masse_Lineique+" kg/m");
 		var Freq = Math.round((1/(2*Longueur))*Math.sqrt(Tension/Masse_Lineique)) + 39;
 		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : "+(Number(Freq))+" Hz";
 	}
@@ -339,13 +334,10 @@ function InitialisationVariables(){
 
 function Reglage(pitch){
 
-	console.log("testorigine");
 	
 	if (document.getElementById("FreqAim").innerText != "Fréquence à obtenir : N/A"){
-		console.log("test");
 		
 		freq_theorique = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
-		console.log(freq_theorique);
 		
 		if (Number(pitch) < freq_theorique-5){
 			if (Number(pitch)<freq_theorique-40){
@@ -379,11 +371,9 @@ function Reglage(pitch){
 		
 		else if (Number(pitch) >= freq_theorique-10 && Number(pitch) <= freq_theorique+10){
 			document.getElementById("reglage").innerText = "Parfait!";
-			console.log("parfait");
 		}
 		
 		else{
-			console.log("test");
 			document.getElementById("reglage").innerText = "Réglage inconnu";
 		}
 		
@@ -396,7 +386,7 @@ function updateGauge(frequency){
     var freqmax = 2*freqtohave;
 	var pointer = document.getElementById("pointer");
     if(frequency < freqmax && frequency > 0){
-      if(frequency>freqtohave-5 && frequency<freqtohave+5){   // 2% de marge d'erreur : Mano
+      if(frequency>freqtohave-5 && frequency<freqtohave+5){
         pointer.style.left = "47%";
         pointer.style.backgroundColor = "green";
       }
@@ -432,7 +422,7 @@ function stopSound() {
 }
 
 
-  function StartButton() {
+function StartButton() {
 	if(document.getElementById("Mode").checked == true){
 		startPitchDetect();
 	}
@@ -440,18 +430,11 @@ function stopSound() {
 	else{
 		if (document.getElementById("FreqAim").innerText != "Fréquence à obtenir : N/A"){
 			if (oscillator && oscil == "running") {
-				// si l'oscillateur est en cours de lecture, arrête le son
-				console.log("stop");
 				stopSound();
 			} 
 			else {
-				// sinon, joue un son à la fréquence de 440 Hz
 				playSound(Number(document.getElementById("FreqAim").innerText.split(" ")[4]));
-				console.log("play");
 			}
-		}
-		else{
-			alert("Veuillez rentrer les paramètres de la corde");
 		}
 	}
 }
@@ -459,12 +442,16 @@ function stopSound() {
 
 function hideElements(){
 	document.getElementById("hammer").className = "hand inactive";
-	 console.log("changement état bouton");
 	if(document.getElementById("Mode").checked == true){
 		if (oscillator && oscil == "running") {	
 			// si l'oscillateur est en cours de lecture, arrête le son
-			console.log("stop");
 			stopSound();
+		}
+		if (VariablesInitialisees()==true){
+			changeTextWithBlur("Appuyez sur le bouton Start pour commencer !");
+		}
+		else{
+			changeTextWithBlur("Veuillez entrer les paramètres du rayon.");
 		}
 		document.getElementById("gauge").style.display = "block";
 		document.getElementById("detector").style.height = "0%";
@@ -472,6 +459,17 @@ function hideElements(){
 		document.getElementById("note").innerText = "--";
 	}
 	else{
+		// si updatePitch est en cours, arrête le traitement
+		if (rafID) {
+			window.cancelAnimationFrame(rafID);
+			rafID = null;
+		}
+		if (VariablesInitialisees()==true){
+			changeTextWithBlur("Appuyez sur le bouton Start afin de commencer le réglage en fonction du son émis !");
+		}
+		else{
+			changeTextWithBlur("Veuillez entrer les paramètres du rayon.");
+		}
 		freqtohave = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
 		updateGauge(freqtohave);
 		document.getElementById("gauge").style.display = "none";
