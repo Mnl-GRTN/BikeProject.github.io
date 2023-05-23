@@ -21,6 +21,7 @@ html{
   margin-left: auto;
   justify-content: flex-end;
   margin-top: 0.8em;
+  margin-right: 1em;
 
 }
 
@@ -31,6 +32,7 @@ html{
 .switch-text {
   font-size: 17px;
   margin-left: 0;
+  margin-right: 0.5em;
   color: white;
 }  
 
@@ -176,7 +178,7 @@ div.confident{ color: black}
   background-color: #fcfbfa;
   transition: ease-in-out 0.5s;
   box-sizing: border-box;
-  padding: 0.5em;
+  padding: 0.8em;
 }
 
 #helpingtext{
@@ -379,6 +381,7 @@ div.confident{ color: black}
 
   h4{
     font-size: 36px;
+    margin-top: 3%;
   }
 
   .buttonstart {
@@ -389,16 +392,6 @@ div.confident{ color: black}
     background-color: lightgray;
     cursor:pointer;
   }  
-  .buttonStart{
-    position: absolute;
-    left: 50%;
-    top: 5em;
-    transform: translate(-125%, -50%);
-  }
-  
-  .buttonStart:hover {
-    color:white;
- }
 
   .topnav a {
     font-size: 48px;
@@ -421,7 +414,7 @@ div.confident{ color: black}
   }
 
   .Tuning{ /* #F9F6EE */
-    width: 82%; height: 100%; margin-left: 5%; padding-bottom: 1em; border-radius: 2em; border: 2em solid #ECF2F8;
+    width: 82%; height: 110%; margin-left: 5%; padding-bottom: 1em; border-radius: 2em; border: 2em solid #ECF2F8;
     display: flex;
     flex-direction: column;
     flex-direction: top;
@@ -437,6 +430,7 @@ div.confident{ color: black}
     margin-left: 0%;
     font-size: 32px;
   }
+  
 
   .ControlPanel{
     margin-top: 0%;
@@ -455,7 +449,9 @@ div.confident{ color: black}
     display:flex;
     align-items: center;
     justify-content: center;
-    height: 50%;
+    height: 40%;
+    max-height: 40%;
+    min-height: 40%;
     padding: 0%;
     width: 100%;
     -webkit-transform: scale(1);
@@ -577,16 +573,6 @@ div.confident{ color: black}
     background-color: lightgray;
     cursor:pointer;
   }  
-  .buttonStart{
-    position: absolute;
-    left: 50%;
-    top: 5em;
-    transform: translate(-125%, -50%);
-  }
-  
-  .buttonStart:hover {
-    color:white;
- }
 
   .topnav a {
     font-size: 48px;
@@ -689,5 +675,118 @@ div.confident{ color: black}
   #pointer {
     height: 20px;
   }
+
+}
+
+@media only screen and (max-device-height: 515px) and (min-device-width: 0px) {
+
+  .Animated{
+    display:none;
+  }
+
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 27px;
+    margin-left: 10px;
+    margin-bottom: -0.3em;
+  }
+  
+  .switch-container{
+    display: block;
+    float : right;
+    justify-content: flex-end;
+    margin-right: 1em;
+    margin-top: 1.5em;
+  }
+  .switch-text {
+    display: inline-block;
+    font-size: 24px;
+    margin-left: 0;
+    color: white;
+  }  
+
+  .slider:before {
+    content: "";
+    position: absolute;
+    height: 21px;
+    width: 21px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.4s;
+  }
+
+  .Tuning{
+    display: flex;
+    flex-direction: row;
+    height: 120%;
+  }
+
+  .description{
+    height: 100%;
+  }
+  
+  .outlinewheel{
+    height:100%;
+    margin-top:1%;
+  }
+
+  .ControlTuner{
+    margin-top:1%;
+    height: 100%;
+  }
+
+  .ControlPanel{
+    height: 100%;
+    width: 110%;
+    margin-top: 1%;
+  }
+
+  .Controlelements{
+    width: 50%;
+  }
+
+  h4{
+    font-size: 26px;
+    margin-top: 3%;
+  }
+
+  #FreqAim{
+    font-size: 22px;
+  }
+
+  .button{
+    padding: 0 1.5em;
+    height: 2em;
+    border-radius: 5%;
+    font-size: 24px;
+  }
+
+  #gauge {
+    width: 50%;
+    height: 10px;
+    background-color: #ddd;
+    position: relative;
+    margin: 4% auto;
+    border-radius: 1em;
+  }
+
+  #pointer {
+    width: 6%;
+    height: 10px;
+    background-color: green;
+    position: absolute;
+    left: 47%;
+    border-radius: 1em;
+    transition: 0.6s;
+  }
+
+  .topnav a {
+    font-size: 28px;
+  }
+
 
 }
