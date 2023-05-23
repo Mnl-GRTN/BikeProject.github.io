@@ -295,9 +295,6 @@ div.confident{ color: black}
 .spoke5 {transform: rotate(150deg);}
 .spoke6 {transform: rotate(180deg);}
 
-
-
-
 @keyframes translate_hand {
   0% {
     transform: translateX(0);
@@ -376,7 +373,11 @@ div.confident{ color: black}
     display : inline-block;
   }
 
-  h4, #FreqAim, #reglage{
+  #FreqAim, #reglage{
+    font-size: 32px;
+  }
+
+  h4{
     font-size: 36px;
   }
 
@@ -420,11 +421,34 @@ div.confident{ color: black}
   }
 
   .Tuning{ /* #F9F6EE */
-    width: 82%; height: 90%; margin-left: 5%; padding-bottom: 1em; border-radius: 2em; border: 2em solid #ECF2F8;
+    width: 82%; height: 100%; margin-left: 5%; padding-bottom: 1em; border-radius: 2em; border: 2em solid #ECF2F8;
     display: flex;
     flex-direction: column;
     flex-direction: top;
     overflow: none;
+  }
+
+  .description{
+    display: block;
+    /* Align vertically for block display */
+    text-align: center;
+    border: 1px #e6e6e6 solid;
+    height: 45%;
+    margin-left: 0%;
+    font-size: 32px;
+  }
+
+  .ControlPanel{
+    margin-top: 0%;
+  }
+
+  .Animated{
+    display: flex;
+    height: 45%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    transform:scale(0.8)
   }
 
   .outlinewheel{
@@ -590,6 +614,30 @@ div.confident{ color: black}
     flex-direction: column;
     flex-direction: top;
     overflow: none;
+  }
+
+  .description{
+    display: block;
+    /* Align vertically for block display */
+    text-align: center;
+    border: 1px #e6e6e6 solid;
+    height: 45%;
+    margin-left: 0%;
+    font-size: 32px;
+  }
+
+  .ControlPanel{
+    margin-top: 0%;
+  }
+
+  .Animated{
+    display: flex;
+    height: 45%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    transform:scale(0.8);
+    margin-bottom: 5%;
   }
 
   .outlinewheel{
