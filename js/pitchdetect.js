@@ -348,26 +348,32 @@ function Reglage(pitch){
 		console.log(freq_theorique);
 		
 		if (Number(pitch) < freq_theorique-5){
-			if (Number(pitch)<freq_theorique-15){
-				document.getElementById("reglage").innerText = "Serrer la vis de 180°";
+			if (Number(pitch)<freq_theorique-40){
+				document.getElementById("reglage").innerText = "Serrer l'écrou de 180°";
+			}
+			else if (Number(pitch)<freq_theorique-15){
+				document.getElementById("reglage").innerText = "Serrer l'écrou de 90°";
 			}
 			else if (Number(pitch)<freq_theorique-10){
-				document.getElementById("reglage").innerText = "Serrer la vis de 90°";
+				document.getElementById("reglage").innerText = "Serrer l'écrou de 45°";
 			}
 			else{	
-				document.getElementById("reglage").innerText = "Serrer la vis de 45°";
+				document.getElementById("reglage").innerText = "Serrer légèrement l'écrou";
 			}
 		}
 
 		else if (Number(pitch) > freq_theorique+5){
-			if (Number(pitch)>freq_theorique+15){
-				document.getElementById("reglage").innerText = "Désserrer la vis de 180°";
+			if (Number(pitch)>freq_theorique+40){
+				document.getElementById("reglage").innerText = "Désserrer l'écrou de 180°";
+			}
+			else if (Number(pitch)>freq_theorique+15){
+				document.getElementById("reglage").innerText = "Désserrer l'écrou de 90°";
 			}
 			else if (Number(pitch)>freq_theorique+10){
-				document.getElementById("reglage").innerText = "Désserrer la vis de 90°";
+				document.getElementById("reglage").innerText = "Désserrer l'écrou de 45°";
 			}
 			else{	
-				document.getElementById("reglage").innerText = "Désserrer la vis de 45°";
+				document.getElementById("reglage").innerText = "Désserrer légèrement l'écrou";
 			}
 		}
 		
@@ -390,7 +396,7 @@ function updateGauge(frequency){
     var freqmax = 2*freqtohave;
 	var pointer = document.getElementById("pointer");
     if(frequency < freqmax && frequency > 0){
-      if(frequency < (freqtohave + (0.02*freqtohave)) && frequency > (freqtohave-(freqtohave*0.02))){
+      if(frequency>freqtohave-5 && frequency<freqtohave+5){   // 2% de marge d'erreur : Mano
         pointer.style.left = "47%";
         pointer.style.backgroundColor = "green";
       }
@@ -399,11 +405,11 @@ function updateGauge(frequency){
       pointer.style.backgroundColor = "orange";
       }
     }
-    if(frequency > freqmax){
+    else if(frequency > freqmax){
       pointer.style.left = "97%";
       pointer.style.backgroundColor = "red";
     }
-    if(frequency <= 0){
+    else if(frequency <= 0){
       pointer.style.left = "0%";
       pointer.style.backgroundColor = "red";
     }
