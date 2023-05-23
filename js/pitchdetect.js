@@ -56,9 +56,6 @@ window.onload = function() {
 }
 
 function startPitchDetect() {
-			if(document.getElementById("tuto").checked == true){
-				alert("Veuillez taper au centre du rayon à l'aide d'un objet métallique après fermeture.");
-			}
 			// grab an audio context
 			audioContext = new AudioContext();
 			changeTextWithBlur("Veuillez activer votre microphone.");
