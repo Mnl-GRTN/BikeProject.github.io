@@ -17,6 +17,7 @@ var oscillator;
 
 window.onload = function() {
 	InitialisationVariables();
+	hideElements();
 	audioContext = new AudioContext();
 	MAX_SIZE = Math.max(4,Math.floor(audioContext.sampleRate/5000));	// corresponds to a 5kHz signal
 
