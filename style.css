@@ -185,7 +185,7 @@ div.confident{ color: black}
 }
 
 .Controlelements{
-  position:absolute;
+  position:relative;
 }
 
 #gauge {
@@ -290,6 +290,10 @@ div.confident{ color: black}
 }
 
 @media only screen and (max-device-width: 480px) {
+
+    body{
+    width: 110%;
+  }
 
   .slider {
     position: absolute;
