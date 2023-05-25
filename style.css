@@ -9,33 +9,6 @@ html{
 /* Responsive navbar with div clas="topnav" on Top of the page without any border with a black background and Add a background-color #f25042 to the active,current link */
 /* shit things  */
 
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 32px;
-  height: 18px;
-  margin-left: auto;
-}
-.switch-container{
-  display: flex;
-  margin-left: auto;
-  justify-content: flex-end;
-  margin-top: 0.8em;
-  margin-right: 1em;
-
-}
-
-.switch input {
-  display: none;
-}
-
-.switch-text {
-  font-size: 17px;
-  margin-left: 0;
-  margin-right: 0.5em;
-  color: white;
-}  
-
 .slider {
   position: absolute;
   top: 0;
@@ -349,29 +322,6 @@ div.confident{ color: black}
     transform: translateX(28px);
   }
 
-  .switch {
-  position: relative;
-  display: inline-block;
-  width: 64px;
-  height: 36px;
-  margin-left: 10px;
-  margin-bottom: -0.3em;
-}
-
-.switch-container{
-  display: block;
-  float : right;
-  justify-content: flex-end;
-  margin-right: 1em;
-  margin-top: 2.2em;
-}
-.switch-text {
-  display: inline-block;
-  font-size: 32px;
-  margin-left: 0;
-  color: white;
-}  
-
   .topnav {
     display : inline-block;
   }
@@ -535,29 +485,6 @@ div.confident{ color: black}
     transform: translateX(28px);
   }
 
-    .switch {
-    position: relative;
-    display: inline-block;
-    width: 64px;
-    height: 36px;
-    margin-left: 10px;
-    margin-bottom: -0.3em;
-  }
-
-  .switch-container{
-    display: block;
-    float : right;
-    justify-content: flex-end;
-    margin-right: 1em;
-    margin-top: 2.4em;
-  }
-  .switch-text {
-    display: inline-block;
-    font-size: 32px;
-    margin-left: 0;
-    color: white;
-  }  
-
   .topnav {
     display : inline-block;
   }
@@ -685,29 +612,6 @@ div.confident{ color: black}
     display:none;
   }
 
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 48px;
-    height: 27px;
-    margin-left: 10px;
-    margin-bottom: -0.3em;
-  }
-  
-  .switch-container{
-    display: block;
-    float : right;
-    justify-content: flex-end;
-    margin-right: 1em;
-    margin-top: 1.5em;
-  }
-  .switch-text {
-    display: inline-block;
-    font-size: 24px;
-    margin-left: 0;
-    color: white;
-  }  
-
   .slider:before {
     content: "";
     position: absolute;
@@ -723,7 +627,7 @@ div.confident{ color: black}
   .Tuning{
     display: flex;
     flex-direction: row;
-    height: 150%;
+    height: 175%;
   }
 
   .description{

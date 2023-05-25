@@ -197,7 +197,6 @@ function updatePitch( time ) {
 		
 			togglePlayback();
 			togglePlayback();
-			//alert("STOP EZ");
 			Reglage(averagesimplified());
 			updateGauge(averagesimplified());
 			//change the class of noteElem to "confident"
