@@ -5,13 +5,12 @@ var isPlaying = false;
 var sourceNode = null;
 var analyser = null;
 var theBuffer = null;
-var DEBUGCANVAS = null;
 var mediaStreamSource = null;
 var detectorElem, 
 	canvasElem,
 	waveCanvas,
 	noteElem
-var FreqGraph = [];
+var Liste_Freq = [];
 var Compteur = 0;
 
 window.onload = function() {
@@ -20,36 +19,7 @@ window.onload = function() {
 
 	detectorElem = document.getElementById( "detector" );
 	canvasElem = document.getElementById( "output" );
-	DEBUGCANVAS = document.getElementById( "waveform" );
-	if (DEBUGCANVAS) {
-		waveCanvas = DEBUGCANVAS.getContext("2d");
-		waveCanvas.strokeStyle = "black";
-		waveCanvas.lineWidth = 1;
-	}
 	noteElem = document.getElementById( "note" );
-
-	detectorElem.ondragenter = function () { 
-		this.classList.add("droptarget"); 
-		return false; };
-	detectorElem.ondragleave = function () { this.classList.remove("droptarget"); return false; };
-	detectorElem.ondrop = function (e) {
-  		this.classList.remove("droptarget");
-  		e.preventDefault();
-		theBuffer = null;
-
-	  	var reader = new FileReader();
-	  	reader.onload = function (event) {
-	  		audioContext.decodeAudioData( event.target.result, function(buffer) {
-	    		theBuffer = buffer;
-	  		}, function(){alert("error loading!");} ); 
-
-	  	};
-	  	reader.onerror = function (event) {
-	  		alert("Error: " + reader.error );
-		};
-	  	reader.readAsArrayBuffer(e.dataTransfer.files[0]);
-	  	return false;
-	};
 
 }
 
@@ -58,18 +28,7 @@ function startPitchDetect() {
 			audioContext = new AudioContext();
 
 			// Attempt to get audio input
-			navigator.mediaDevices.getUserMedia(
-			{
-				"audio": {
-					"mandatory": {
-						"googEchoCancellation": "false",
-						"googAutoGainControl": "false",
-						"googNoiseSuppression": "false",
-						"googHighpassFilter": "false"
-					},
-					"optional": []
-				},
-			}).then((stream) => {
+			navigator.mediaDevices.getUserMedia({"audio": "true"}).then((stream) => {
 				// Create an AudioNode from the stream.
 				mediaStreamSource = audioContext.createMediaStreamSource(stream);
 
@@ -82,13 +41,23 @@ function startPitchDetect() {
 			}).catch((err) => {
 				// always check for errors at the end.
 				console.error(`${err.name}: ${err.message}`);
-				alert('Stream generation failed.');
+				alert("Vous devez activer votre microphone pour utiliser cette fonctionnalité.");
 			});
-
 }
 
 
-function togglePlayback() {
+function stopListening() {
+	sourceNode = audioContext.createBufferSource();
+    sourceNode.buffer = theBuffer;
+    sourceNode.loop = true;
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    sourceNode.connect( analyser );
+    analyser.connect( audioContext.destination );
+    sourceNode.start( 0 );
+    isPlaying = true;
+    isLiveInput = false;
+
     if (isPlaying) {
         //stop playing and return
         sourceNode.stop( 0 );
@@ -100,24 +69,11 @@ function togglePlayback() {
 		if (!window.cancelAnimationFrame)
 			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
         window.cancelAnimationFrame( rafID );
+
         return "Stop";
     }
-
-    sourceNode = audioContext.createBufferSource();
-    sourceNode.buffer = theBuffer;
-    sourceNode.loop = true;
-    analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    sourceNode.connect( analyser );
-    analyser.connect( audioContext.destination );
-    sourceNode.start( 0 );
-    isPlaying = true;
-    isLiveInput = false;
-
-    updatePitch();
-
-    return "Stop";
 }
+
 
 var rafID = null;
 var tracks = null;
@@ -171,27 +127,28 @@ function autoCorrelate( buf, sampleRate ) {
 	return sampleRate/T0;
 }
 
+
+
 function updatePitch( time ) {
-	var cycles = new Array;
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
-	// TODO: Paint confidence meter on canvasElem here.
 
  	if (ac == -1) {
  		detectorElem.className = "vague";
 		noteElem.innerText = "--";
- 	} else {
+ 	} 
+	
+	else {
 	 	detectorElem.className = "confident";
 	 	pitch = ac;
 		if (pitch > 40 && pitch < 1000){
 	 		noteElem.innerText = Math.round( pitch )+ " Hz";
-			 FreqGraph.push([((FreqGraph.length)/60).toFixed(2), Math.round( pitch )]);
-			 console.log("FreqGraph : "+pitch);
+			 Liste_Freq.push([((Liste_Freq.length)/60).toFixed(2), Math.round( pitch )]);
+
 		}
 		
-		if (FreqGraph.length > document.getElementById("Duree").value*60) { //60 pour 1s
-			togglePlayback();
-			console.log(averagesimplified());
+		if (Liste_Freq.length > document.getElementById("Duree").value*60) { //60 pour 1s
+			stopListening();
 			createGraph();
 		}
 		
@@ -211,10 +168,11 @@ function createGraph(){
 	div.style = "width: 500px; height: 400px; margin: 0 auto; background-color: #fff; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-bottom: 10px; margin-top: 30px;";
 	div.style.paddingBottom = 1.5+"em";
 	//Ajouter un texte à div.id en UTF-8 avec la moyenne de la fréquence en utilisant averageGraph()
-	div.innerText = "Moyenne de la fréquence : "+averagesimplified().toFixed(2)+" Hz";
+	div.innerText = "Moyenne de la fréquence : "+smart_average().toFixed(2)+" Hz";
 	document.body.appendChild(div);
 	anychart.onDocumentReady(function () {
-		var data = FreqGraph;
+
+		var data = Liste_Freq;
 
 		// create a data set
 		var dataSet = anychart.data.set(data);
@@ -227,13 +185,11 @@ function createGraph(){
 
 		// create the series and name them
 		var firstSeries = chart.line(firstSeriesData);
-		firstSeries.name("Frequency");
-
-		// add a legend
-		chart.legend().enabled(true);
-
-		// add a title
-		chart.title("Frequency Graph");
+		
+		chart.title("Fréquence en fonction du temps");
+		chart.xAxis().title("Temps (s)");
+    	chart.yAxis().title("Fréquence (Hz)");
+		
 		// specify where to display the chart
 		chart.container(div.id);
 		chart.maxHeight(400);
@@ -241,8 +197,7 @@ function createGraph(){
 
 		//draw the chart in the Graph div
 		chart.draw();
-		alert("Graph Added");
-		FreqGraph = [];
+		Liste_Freq = [];
 
 
 	});
@@ -250,11 +205,11 @@ function createGraph(){
 }
 
 
-function averagesimplified(){
+function smart_average(){
 
 	liste_des_frequences = []
-	for(var i = 0; i < FreqGraph.length; i++){
-		liste_des_frequences.push(FreqGraph[i][1]);
+	for(var i = 0; i < Liste_Freq.length; i++){
+		liste_des_frequences.push(Liste_Freq[i][1]);
 	}
 
 	var freq = [] ;
