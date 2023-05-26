@@ -185,7 +185,7 @@
     padding-right: 25%;
   }
   
-  .ControlTuner .user-box input {
+  .user-box input {
     width: 60%;
     padding: 0.5em 0;
     font-size: 16px;
@@ -198,9 +198,21 @@
     background: transparent;
     transition: .5s;
   }
+
+  .Graphics .user-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Graphics .user-box input{
+    width: 20%;
+    text-align: center;
+    padding-right: 1em;
+  }
   
-  .ControlTuner .user-box input:focus,
-  .ControlTuner .user-box input:valid{
+  .user-box input:focus,
+  .user-box input:valid{
     border: 1px solid #5f93f8;
     text-indent: 1em;
   }

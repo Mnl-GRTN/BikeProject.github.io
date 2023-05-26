@@ -3,6 +3,7 @@
 	<head>
 		<title>BikeProject</title>
 		<link rel="stylesheet" type="text/css" href="style.css"/>
+		<link rel="stylesheet" type="text/css" href="toggleswitch.css"/>
 
 
 		<link rel="icon" type="image/png" href="icons/favicon-32x32.png" sizes="any" />
@@ -17,18 +18,23 @@
 	</head>
 	<body>
 		<script src="js/graph.js"></script>
-		<div class="btn-group">
-			<button class="button" id="startButton" onclick="startButton();">Start</button>
-			<button	class="button" onclick="ClearGraph()">Clear</button>
-		</div>
-		<div>
-		<label for="duree">Durée de l'enregistrement en seconde :</label>
-		<input type="text" id="Duree" value="1"> </input>
-		</div>
+		<div class="Graphics">
+			<div class="btn-group">
+				<button class="button" onclick="startPitchDetect();">Start</button>
+				<button	class="button" onclick="stopListening()">Stop</button>
+				<button	class="button" onclick="ClearGraph()">Clear</button>
+			</div>
+			<div class="user-box">
+				<div class="Duration">
+					<p>Durée de l'enregistrement en seconde :</p>
+					<input type="text" id="Duree" value="1"> </input>
+				</div>
+			</div>
 		 
-		<div id="detector" class="vague">
-			<div class="note" style="margin-bottom: 2em;"><span id="note">--</span></div>   
-			<canvas id="output" width=300 height=42></canvas>
+			<div id="detector" class="vague">
+				<div class="note" style="margin-bottom: 2em;"><span id="note">--</span></div>   
+				<canvas id="output" width=300 height=42></canvas>
+			</div>
 		</div>
 		
 	</body>
