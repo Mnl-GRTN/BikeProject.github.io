@@ -272,8 +272,19 @@ function averagesimplified(){
 }
 
 function VariablesInitialisees(){
-	if (document.getElementById("density").value != "" && document.getElementById("LengthEntry").value != "" && document.getElementById("TenseEntry").value != "" && document.getElementById("diameter").value != ""){
-		return true;
+	var regex = /^[0-9]+(\.[0-9]+)?$/;
+	var density = document.getElementById("density").value;
+	var LengthEntry = document.getElementById("LengthEntry").value;
+	var TenseEntry = document.getElementById("TenseEntry").value;
+	var diameter = document.getElementById("diameter").value;
+	
+	if (density != "" && LengthEntry != "" && TenseEntry != "" && diameter != ""){
+		if (regex.test(density) && regex.test(LengthEntry) && regex.test(TenseEntry) && regex.test(diameter)){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	else{
 		return false;
@@ -282,7 +293,7 @@ function VariablesInitialisees(){
 
 function InitialisationVariables(){	
 
-	if (document.getElementById("density").value != "" && document.getElementById("LengthEntry").value != "" && document.getElementById("TenseEntry").value != "" && document.getElementById("diameter").value != ""){
+	if (VariablesInitialisees() == true){
 		document.getElementById("Tension").className = "confident";
 		document.getElementById("Longueur").className = "confident";
 		document.getElementById("Densité").className = "confident";
@@ -303,7 +314,7 @@ function InitialisationVariables(){
 		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : "+(Number(Freq))+" Hz";
 	}
 	else {
-		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : N/A";
+		document.getElementById("FreqAim").innerText = "Fréquence à obtenir : inconnue";
 		changeTextWithBlur("Veuillez entrer les paramètres du rayon.");
 
 		if (document.getElementById("TenseEntry").value == ""){
@@ -331,8 +342,7 @@ function InitialisationVariables(){
 
 function Reglage(pitch){
 
-	
-	if (document.getElementById("FreqAim").innerText != "Fréquence à obtenir : N/A"){
+	if (document.getElementById("FreqAim").innerText != "Fréquence à obtenir : inconnue"){
 		
 		freq_theorique = Number(document.getElementById("FreqAim").innerText.split(" ")[4]);
 		
@@ -425,7 +435,7 @@ function StartButton() {
 	}
 
 	else{
-		if (document.getElementById("FreqAim").innerText != "Fréquence à obtenir : N/A"){
+		if (document.getElementById("FreqAim").innerText != "Fréquence à obtenir : inconnue"){
 			if (oscillator && oscil == "running") {
 				stopSound();
 			} 
