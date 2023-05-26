@@ -7,46 +7,42 @@ var analyser = null;
 var theBuffer = null;
 var mediaStreamSource = null;
 var detectorElem, 
-	canvasElem,
-	waveCanvas,
 	noteElem
 var Liste_Freq = [];
 var Compteur = 0;
 
+// Fonction qui se lance au chargement de la page
 window.onload = function() {
 	audioContext = new AudioContext();
 	MAX_SIZE = Math.max(4,Math.floor(audioContext.sampleRate/5000));	// corresponds to a 5kHz signal
 
 	detectorElem = document.getElementById( "detector" );
-	canvasElem = document.getElementById( "output" );
 	noteElem = document.getElementById( "note" );
 
 }
 
+// Fonction qui se lance au clic sur le bouton "Start" qui lance l'écoute
 function startPitchDetect() {
-			// grab an audio context
+
+			isPlaying = true;
 			audioContext = new AudioContext();
-
-			// Attempt to get audio input
 			navigator.mediaDevices.getUserMedia({"audio": "true"}).then((stream) => {
-				// Create an AudioNode from the stream.
+	
 				mediaStreamSource = audioContext.createMediaStreamSource(stream);
-
-				// Connect it to the destination.
 				analyser = audioContext.createAnalyser();
 				analyser.fftSize = 2048;
 				mediaStreamSource.connect( analyser );
 				updatePitch();
 
 			}).catch((err) => {
-				// always check for errors at the end.
 				console.error(`${err.name}: ${err.message}`);
 				alert("Vous devez activer votre microphone pour utiliser cette fonctionnalité.");
 			});
 }
 
-
+// Fonction qui se lance au clic sur le bouton "Stop" qui arrête l'écoute
 function stopListening() {
+
 	sourceNode = audioContext.createBufferSource();
     sourceNode.buffer = theBuffer;
     sourceNode.loop = true;
@@ -59,7 +55,7 @@ function stopListening() {
     isLiveInput = false;
 
     if (isPlaying) {
-        //stop playing and return
+		document.getElementById("startButton").innerText = "Start";
         sourceNode.stop( 0 );
         sourceNode = null;
         analyser = null;
@@ -81,7 +77,7 @@ var buflen = 2048;
 var buf = new Float32Array( buflen );
 
 
-
+// Fonction qui permet de détecter la fréquence du son capté par le microphone
 function autoCorrelate( buf, sampleRate ) {
 	// Implements the ACF2+ algorithm
 	var SIZE = buf.length;
@@ -128,7 +124,7 @@ function autoCorrelate( buf, sampleRate ) {
 }
 
 
-
+// Fonction qui permet de mettre à jour la fréquence détectée
 function updatePitch( time ) {
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
@@ -160,51 +156,39 @@ function updatePitch( time ) {
 }
 
 
-//Function that create a div automatically for each graph and add it
+// Fonction qui permet de créer un graphique avec la librairie AnyChart
 function createGraph(){
 	var div = document.createElement("div");
 	div.id = "Graph"+Compteur;
-	//Change CSS of div.id to copy the Graph div css
+
 	div.style = "width: 500px; height: 400px; margin: 0 auto; background-color: #fff; border: 1px solid #ccc; border-radius: 3px; padding: 10px; margin-bottom: 10px; margin-top: 30px;";
 	div.style.paddingBottom = 1.5+"em";
-	//Ajouter un texte à div.id en UTF-8 avec la moyenne de la fréquence en utilisant averageGraph()
 	div.innerText = "Moyenne de la fréquence : "+smart_average().toFixed(2)+" Hz";
 	document.body.appendChild(div);
 	anychart.onDocumentReady(function () {
 
 		var data = Liste_Freq;
-
-		// create a data set
 		var dataSet = anychart.data.set(data);
-
-		// map the data for all series
 		var firstSeriesData = dataSet.mapAs({x: 0, value: 1});
-
-		// create a line chart
 		var chart = anychart.line();
-
-		// create the series and name them
 		var firstSeries = chart.line(firstSeriesData);
 		
 		chart.title("Fréquence en fonction du temps");
 		chart.xAxis().title("Temps (s)");
     	chart.yAxis().title("Fréquence (Hz)");
-		
-		// specify where to display the chart
+
 		chart.container(div.id);
 		chart.maxHeight(400);
 		chart.maxWidth(500);
 
-		//draw the chart in the Graph div
 		chart.draw();
 		Liste_Freq = [];
-
 
 	});
 	Compteur++;
 }
 
-
+// Fonction qui permet de calculer la moyenne des fréquences détectées (en enlevant les valeurs aberrantes)
 function smart_average(){
 
 	liste_des_frequences = []
@@ -250,8 +234,8 @@ function smart_average(){
 	return avg;
 }
 
+// Fonction qui permet de supprimer tous les graphiques
 function ClearGraph(){
-	//Clear/Delete all the divs
 	for (var i = 0; i < Compteur; i++) {
 		var div = document.getElementById("Graph"+i);
 		div.parentNode.removeChild(div);
@@ -259,3 +243,15 @@ function ClearGraph(){
 	Compteur = 0;
 }
 
+// Fonction qui lance lorsque l'utilisateur clique sur le bouton "Start/Stop"
+function startButton() {
+	if(!isPlaying){
+		startPitchDetect();
+		document.getElementById("startButton").innerText = "Stop";
+	}
+	
+	else{
+		stopListening();
+		document.getElementById("startButton").innerText = "Start";
+	}
+}
