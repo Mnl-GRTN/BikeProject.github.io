@@ -304,6 +304,10 @@ div.confident{ color: black}
 }
 
 @media only screen and (max-device-width: 480px) and (orientation: portrait) {
+    
+    .Graphics{ /* #F9F6EE */
+    height: 15%; 
+  }
 
     body{
     width: 110%;
