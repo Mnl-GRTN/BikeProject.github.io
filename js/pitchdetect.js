@@ -187,16 +187,18 @@ function updatePitch( time ) {
 
 			// On affiche les réglages à effectuer en fonction de la situation
 			if(document.getElementById("reglage").innerText == "Parfait!"){
-				changeTextWithBlur("Fréquence du rayon : " + noteElem.innerText + ". Félicitations, vous avez réussi à accorder votre rayon !");
+				changeTextWithBlur("Félicitations, vous avez réussi à accorder votre rayon !");
 			}
 
 			// Si les différents paramètres du rayon n'ont pas été initialisés, on demande à l'utilisateur de le faire
 			else if (!is_parameter_init()){
 				changeTextWithBlur("Veuillez entrer les paramètres de votre rayon dans la section correspondante.");
 			}
+
 			else{
-				changeTextWithBlur("Fréquence du rayon : " + noteElem.innerText + ". Veuillez suivre les instructions ci-dessous et recommencer.");
+				changeTextWithBlur("Tension du rayon : " + tension_Reel(moyenne_freq) + " N. Veuillez suivre les instructions ci-dessous et recommencer.");
 			}
+
 			Liste_Freq = [];
 			
 		}
@@ -206,6 +208,23 @@ function updatePitch( time ) {
 	if (!window.requestAnimationFrame)
 		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
 	rafID = window.requestAnimationFrame( updatePitch );
+}
+
+//Fonction qui permet de calculer la tension du rayon en fonction de la fréquence détectée et des paramètres du rayon
+function tension_Reel(moyenne_freq){
+
+	// On récupère les paramètres du rayon
+	var Longueur = document.getElementById("LengthEntry").value * 0.01; // cm to m
+	var Masse_Volumique = document.getElementById("density").value * 1000; // density to kg/m3
+	var Diametre = document.getElementById("diameter").value * 0.001; // mm to m
+	var Masse = Masse_Volumique * Math.PI * Math.pow(Diametre,2) * Longueur / 4; // kg
+	var Masse_Lineique = Masse / Longueur ; // kg/m
+
+	// On calcule la tension du rayon en appliquant la formule de la corde vibrante avec le correctif de 39.2 Hz
+	tension = Masse_Lineique * 4 * Math.pow(Longueur,2) * Math.pow(moyenne_freq-39.2,2) ; // N
+	tension = Math.round(tension);
+
+	return tension;
 }
 
 // Fonction qui permet de calculer la moyenne des fréquences détectées (en enlevant les valeurs aberrantes)
