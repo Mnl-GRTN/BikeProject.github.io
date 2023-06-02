@@ -1,7 +1,7 @@
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 var audioContext = null;
-var isPlaying = false;
+var isListening = false;
 var sourceNode = null;
 var analyser = null;
 var mediaStreamSource = null;
@@ -13,13 +13,9 @@ var oscillator;
 window.onload = function() {
 	InitialisationVariables();
 	changement_mode();
-
-	audioContext = new AudioContext();
-	MAX_SIZE = Math.max(4,Math.floor(audioContext.sampleRate/5000));	// corresponds to a 5kHz signal
-
+ 
 	detectorElem = document.getElementById( "detector" );
 	noteElem = document.getElementById( "note" );
-
 }
 
 function startPitchDetect() {
@@ -35,7 +31,7 @@ function startPitchDetect() {
 				mediaStreamSource.connect( analyser );
 				changeTextWithBlur("Veuillez taper au centre du rayon à l'aide d'un objet métallique.");
 
-				isPlaying = true;
+				isListening = true;
 				updatePitch();
 				
 				// Changer la classe de hammer afin de démarrer l'animation
@@ -75,12 +71,12 @@ function stopListening() {
     analyser.connect( audioContext.destination );
     sourceNode.start(0);
 
-    if (isPlaying) {
+    if (isListening) {
 
         sourceNode.stop( 0 );
         sourceNode = null;
         analyser = null;
-        isPlaying = false;
+        isListening = false;
 		
 		if (!window.cancelAnimationFrame)
 			window.cancelAnimationFrame = window.webkitCancelAnimationFrame;
@@ -145,7 +141,7 @@ function autoCorrelate( buf, sampleRate ) {
 }
 
 // Fonction qui permet de mettre à jour la fréquence détectée
-function updatePitch( time ) {
+function updatePitch() {
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
 
@@ -155,6 +151,7 @@ function updatePitch( time ) {
  		detectorElem.className = "vague";
 		noteElem.innerText = "--";
 		document.getElementById("reglage").innerText = "--";
+		rafID = window.requestAnimationFrame( updatePitch ); // On continue à écouter le microphone
 	} 
 
 	// Sinon, on affiche la fréquence détectée
@@ -202,12 +199,14 @@ function updatePitch( time ) {
 			Liste_Freq = [];
 			
 		}
-		
+		else {
+			rafID = window.requestAnimationFrame( updatePitch ); // On continue à écouter le microphone
+		}
 	}
 	
-	if (!window.requestAnimationFrame)
+	if (!window.requestAnimationFrame) // Si le navigateur ne supporte pas requestAnimationFrame, on utilise webkitRequestAnimationFrame
 		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-	rafID = window.requestAnimationFrame( updatePitch );
+	
 }
 
 //Fonction qui permet de calculer la tension du rayon en fonction de la fréquence détectée et des paramètres du rayon
@@ -448,6 +447,7 @@ var oscil = "";
 
 // Fonction qui permet de jouer un son à une fréquence donnée
 function playSound(frequency) {
+	audioContext = new AudioContext();
 	oscil = "running";
 	document.getElementById("buttonstart").innerText = "Stop";
 	oscillator = audioContext.createOscillator();

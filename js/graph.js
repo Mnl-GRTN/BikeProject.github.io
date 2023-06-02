@@ -1,7 +1,7 @@
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
 var audioContext = null;
-var isPlaying = false;
+var isListening = false;
 var sourceNode = null;
 var analyser = null;
 var theBuffer = null;
@@ -13,18 +13,14 @@ var Compteur = 0;
 
 // Fonction qui se lance au chargement de la page
 window.onload = function() {
-	audioContext = new AudioContext();
-	MAX_SIZE = Math.max(4,Math.floor(audioContext.sampleRate/5000));	// corresponds to a 5kHz signal
-
 	detectorElem = document.getElementById( "detector" );
 	noteElem = document.getElementById( "note" );
-
 }
 
 // Fonction qui se lance au clic sur le bouton "Start" qui lance l'écoute
 function startPitchDetect() {
 
-			isPlaying = true;
+			isListening = true;
 			audioContext = new AudioContext();
 			navigator.mediaDevices.getUserMedia({"audio": "true"}).then((stream) => {
 	
@@ -51,15 +47,15 @@ function stopListening() {
     sourceNode.connect( analyser );
     analyser.connect( audioContext.destination );
     sourceNode.start( 0 );
-    isPlaying = true;
+    isListening = true;
     isLiveInput = false;
 
-    if (isPlaying) {
+    if (isListening) {
 		document.getElementById("startButton").innerText = "Start";
         sourceNode.stop( 0 );
         sourceNode = null;
         analyser = null;
-        isPlaying = false;
+        isListening = false;
 		noteElem.innerText = "--";
 		
 		if (!window.cancelAnimationFrame)
@@ -125,13 +121,14 @@ function autoCorrelate( buf, sampleRate ) {
 
 
 // Fonction qui permet de mettre à jour la fréquence détectée
-function updatePitch( time ) {
+function updatePitch() {
 	analyser.getFloatTimeDomainData( buf );
 	var ac = autoCorrelate( buf, audioContext.sampleRate );
 
  	if (ac == -1) {
  		detectorElem.className = "vague";
 		noteElem.innerText = "--";
+		rafID = window.requestAnimationFrame( updatePitch );
  	} 
 	
 	else {
@@ -147,12 +144,13 @@ function updatePitch( time ) {
 			stopListening();
 			createGraph();
 		}
+		else 
+			rafID = window.requestAnimationFrame( updatePitch );
 		
 	}
 
 	if (!window.requestAnimationFrame)
 		window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-	rafID = window.requestAnimationFrame( updatePitch );
 }
 
 
@@ -245,7 +243,7 @@ function ClearGraph(){
 
 // Fonction qui lance lorsque l'utilisateur clique sur le bouton "Start/Stop"
 function startButton() {
-	if(!isPlaying){
+	if(!isListening){
 		startPitchDetect();
 		document.getElementById("startButton").innerText = "Stop";
 	}
