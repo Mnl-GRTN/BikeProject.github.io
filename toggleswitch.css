@@ -143,7 +143,7 @@
   width: 27px;
   }
   .toggleSwitch.large > span {
-  height: 29px;
+  height: 21px;
   line-height: 28px;
   }
   .toggleSwitch.large input:checked ~ a {
@@ -185,7 +185,7 @@
     padding-right: 25%;
   }
   
-  .ControlTuner .user-box input {
+  .user-box input {
     width: 60%;
     padding: 0.5em 0;
     font-size: 16px;
@@ -198,11 +198,43 @@
     background: transparent;
     transition: .5s;
   }
+
+  .Graphics .user-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .Graphics .user-box input{
+    width: 20%;
+    text-align: center;
+    padding-right: 1em;
+  }
   
-  .ControlTuner .user-box input:focus,
-  .ControlTuner .user-box input:valid{
+  .user-box input:focus,
+  .user-box input:valid{
     border: 1px solid #5f93f8;
     text-indent: 1em;
   }
 
-  /* CREATE A VIEW INFERIOR TO 1100PX */
+  @media only screen and (max-device-width: 480px) and (orientation: portrait) {
+    .toggleSwitch > span span {
+      line-height:68px;
+      font-size: 1.5em;
+      }
+      
+      .toggleSwitch {
+        height: 36px;
+        width: 400px;
+        height:68px;
+        margin-bottom: 2em;
+      }
+
+      .ControlTuner .user-box{
+        font-size: 32px;
+      }
+
+      .ControlTuner .user-box input{
+        font-size: 36px;
+      }
+  }
